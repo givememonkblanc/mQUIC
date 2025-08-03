@@ -1,0 +1,2 @@
+/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libpicotls-openssl.a "CMakeFiles/picotls-openssl.dir/lib/openssl.c.o"
+/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libpicotls-openssl.a

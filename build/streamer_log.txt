@@ -1,0 +1,27 @@
+[2025-07-15 15:33:43] INFO: Streamer starting up...
+[2025-07-15 15:33:44] INFO: Camera and frame buffer are ready.
+[2025-07-15 15:33:44] INFO: QUIC server waiting for connections on port 4433...
+[2025-07-15 15:33:51] CALLBACK: event=9, stream_id=0, length=0
+[2025-07-15 15:33:51] CALLBACK: event=10, stream_id=0, length=0
+[2025-07-15 15:33:51] EVENT: Stream 0 is ready. Waiting for 'START' request from client.
+[2025-07-15 15:33:51] CALLBACK: event=0, stream_id=0, length=5
+[2025-07-15 15:33:51] EVENT: Received 'START' from client. Starting transmission on stream 0.
+[2025-07-15 15:33:51] CALLBACK: event=8, stream_id=0, length=1218
+[2025-07-15 15:33:51] SENT: Frame 1 (298790 bytes) on stream 0.
+[2025-07-15 15:33:57] CALLBACK: event=6, stream_id=0, length=0
+[2025-07-15 15:33:57] CALLBACK: event=5, stream_id=0, length=0
+[2025-07-15 15:33:57] EVENT: Connection closed or reset. Stopping transmission.
+[2025-07-15 15:54:10] INFO: Streamer starting up...
+[2025-07-15 15:54:12] INFO: Camera and frame buffer are ready.
+[2025-07-15 15:54:12] INFO: QUIC server waiting for connections on port 4433...
+[2025-07-15 15:54:16] EVENT: Stream 0 is ready. Waiting for 'START' request from client.
+[2025-07-15 15:54:16] EVENT: Received 'START' from client. Starting transmission on stream 0.
+[2025-07-15 15:54:16] SENT: Frame 1 (340279 bytes) on stream 0.
+[2025-07-15 15:54:22] EVENT: Connection closed or reset. Stopping transmission.
+[2025-07-15 15:59:20] INFO: Streamer starting up...
+[2025-07-15 15:59:22] INFO: Camera and frame buffer are ready.
+[2025-07-15 15:59:22] INFO: QUIC server waiting for connections on port 4433...
+[2025-07-15 15:59:25] EVENT: Stream 0 is ready. Waiting for 'START' request from client.
+[2025-07-15 15:59:25] EVENT: Received 'START' from client. Starting transmission on stream 0.
+[2025-07-15 15:59:25] SENT: Frame 1 (335168 bytes) on stream 0.
+[2025-07-15 15:59:30] EVENT: Connection closed or reset. Stopping transmission.
