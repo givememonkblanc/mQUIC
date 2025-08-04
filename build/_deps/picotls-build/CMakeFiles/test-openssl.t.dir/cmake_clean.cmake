@@ -55,7 +55,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-openssl.t.dir/t/openssl.c.o.d"
   "CMakeFiles/test-openssl.t.dir/t/picotls.c.o"
   "CMakeFiles/test-openssl.t.dir/t/picotls.c.o.d"
-  "picotls-probes.h"
   "test-openssl.t"
   "test-openssl.t.pdb"
 )
