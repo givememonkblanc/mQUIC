@@ -3,13 +3,13 @@
 # No other meaning or use of this file is supported.
 
 method=git
-command=/opt/homebrew/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-subbuild/picotls-populate-prefix/tmp/picotls-populate-gitclone.cmake
-source_dir=/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-src
-work_dir=/Users/dohyeonlim/mQUIC-1/build/_deps
+command=/usr/bin/cmake;-P;/home/takensoft/Desktop/mQUIC/build/_deps/picotls-subbuild/picotls-populate-prefix/tmp/picotls-populate-gitclone.cmake
+source_dir=/home/takensoft/Desktop/mQUIC/build/_deps/picotls-src
+work_dir=/home/takensoft/Desktop/mQUIC/build/_deps
 repository=https://github.com/h2o/picotls.git
 remote=origin
 init_submodules=TRUE
 recurse_submodules=--recursive
 submodules=
 CMP0097=NEW
-      
+

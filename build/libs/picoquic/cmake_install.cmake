@@ -1,4 +1,4 @@
-# Install script for directory: /Users/dohyeonlim/mQUIC-1/libs/picoquic
+# Install script for directory: /home/takensoft/Desktop/mQUIC/libs/picoquic
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -27,17 +27,28 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   endif()
 endif()
 
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
+endif()
+
 # Is this installation the result of a crosscompile?
 if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-# Set path to fallback-tool for dependency-resolution.
+# Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/objdump")
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}/usr/local/bin/picoquicdemo" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/picoquicdemo")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/picoquicdemo"
+         RPATH "")
+  endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/picoquicdemo")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -46,16 +57,11 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/picoquicdemo")
+  file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/picoquicdemo")
   if(EXISTS "$ENV{DESTDIR}/usr/local/bin/picoquicdemo" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/picoquicdemo")
-    execute_process(COMMAND /usr/bin/install_name_tool
-      -delete_rpath "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-src/("
-      -delete_rpath "/opt/homebrew/Cellar/brotli/1.1.0/lib"
-      -delete_rpath "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-src/)"
-      "$ENV{DESTDIR}/usr/local/bin/picoquicdemo")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip" -u -r "$ENV{DESTDIR}/usr/local/bin/picoquicdemo")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/picoquicdemo")
     endif()
   endif()
 endif()
@@ -69,11 +75,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/libpicohttp-core.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicohttp-core.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicohttp-core.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicohttp-core.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/libpicohttp-core.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -86,19 +88,25 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   file(INSTALL DESTINATION "/usr/local/include" TYPE FILE FILES
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/h3zero.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/h3zero_common.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/h3zero_uri.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/h3zero_url_template.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/democlient.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/demoserver.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/pico_webtransport.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/picomask.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picohttp/wt_baton.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero_common.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero_uri.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero_url_template.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/democlient.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/demoserver.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/pico_webtransport.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/picomask.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/wt_baton.h"
     )
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}/usr/local/bin/picolog_t" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/picolog_t")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}/usr/local/bin/picolog_t"
+         RPATH "")
+  endif()
   list(APPEND CMAKE_ABSOLUTE_DESTINATION_FILES
    "/usr/local/bin/picolog_t")
   if(CMAKE_WARN_ON_ABSOLUTE_INSTALL_DESTINATION)
@@ -107,16 +115,11 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/picolog_t")
+  file(INSTALL DESTINATION "/usr/local/bin" TYPE EXECUTABLE FILES "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/picolog_t")
   if(EXISTS "$ENV{DESTDIR}/usr/local/bin/picolog_t" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/bin/picolog_t")
-    execute_process(COMMAND /usr/bin/install_name_tool
-      -delete_rpath "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-src/("
-      -delete_rpath "/opt/homebrew/Cellar/brotli/1.1.0/lib"
-      -delete_rpath "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-src/)"
-      "$ENV{DESTDIR}/usr/local/bin/picolog_t")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip" -u -r "$ENV{DESTDIR}/usr/local/bin/picolog_t")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}/usr/local/bin/picolog_t")
     endif()
   endif()
 endif()
@@ -130,11 +133,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/libpicoquic-log.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicoquic-log.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicoquic-log.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicoquic-log.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/libpicoquic-log.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -147,8 +146,8 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   file(INSTALL DESTINATION "/usr/local/include" TYPE FILE FILES
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/loglib/autoqlog.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/loglib/auto_memlog.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/auto_memlog.h"
     )
 endif()
 
@@ -161,11 +160,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/libpicoquic-core.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicoquic-core.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicoquic-core.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicoquic-core.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/libpicoquic-core.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -177,11 +172,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-build/libpicotls-core.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicotls-core.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicotls-core.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicotls-core.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/_deps/picotls-build/libpicotls-core.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -193,11 +184,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-build/libpicotls-openssl.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicotls-openssl.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicotls-openssl.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicotls-openssl.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/_deps/picotls-build/libpicotls-openssl.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -209,11 +196,7 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   if(CMAKE_ERROR_ON_ABSOLUTE_INSTALL_DESTINATION)
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
-  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-build/libpicotls-minicrypto.a")
-  if(EXISTS "$ENV{DESTDIR}/usr/local/lib/libpicotls-minicrypto.a" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}/usr/local/lib/libpicotls-minicrypto.a")
-    execute_process(COMMAND "/Users/dohyeonlim/Downloads/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib" "$ENV{DESTDIR}/usr/local/lib/libpicotls-minicrypto.a")
-  endif()
+  file(INSTALL DESTINATION "/usr/local/lib" TYPE STATIC_LIBRARY FILES "/home/takensoft/Desktop/mQUIC/build/_deps/picotls-build/libpicotls-minicrypto.a")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
@@ -226,22 +209,22 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   file(INSTALL DESTINATION "/usr/local/include" TYPE FILE FILES
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picosocks.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_utils.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_packet_loop.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_unified_log.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_logger.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_binlog.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_config.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_lb.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_newreno.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_cubic.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_bbr.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_bbr1.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_fastcc.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/picoquic_prague.h"
-    "/Users/dohyeonlim/mQUIC-1/libs/picoquic/picoquic/siphash.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picosocks.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_utils.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_packet_loop.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_unified_log.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_logger.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_binlog.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_config.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_lb.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_newreno.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_cubic.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_bbr.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_bbr1.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_fastcc.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_prague.h"
+    "/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/siphash.h"
     )
 endif()
 
@@ -255,20 +238,14 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
     message(FATAL_ERROR "ABSOLUTE path INSTALL DESTINATION forbidden (by caller): ${CMAKE_ABSOLUTE_DESTINATION_FILES}")
   endif()
   file(INSTALL DESTINATION "/usr/local/lib/cmake/picoquic" TYPE FILE FILES
-    "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/picoquic-config.cmake"
-    "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/picoquic-config-version.cmake"
+    "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/picoquic-config.cmake"
+    "/home/takensoft/Desktop/mQUIC/build/libs/picoquic/picoquic-config-version.cmake"
     )
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/Users/dohyeonlim/mQUIC-1/build/_deps/picotls-build/cmake_install.cmake")
+  include("/home/takensoft/Desktop/mQUIC/build/_deps/picotls-build/cmake_install.cmake")
 
 endif()
 
-string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
-       "${CMAKE_INSTALL_MANIFEST_FILES}")
-if(CMAKE_INSTALL_LOCAL_ONLY)
-  file(WRITE "/Users/dohyeonlim/mQUIC-1/build/libs/picoquic/install_local_manifest.txt"
-     "${CMAKE_INSTALL_MANIFEST_CONTENT}")
-endif()

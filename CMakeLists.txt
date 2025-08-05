@@ -67,19 +67,21 @@ target_link_libraries(mquic_server PRIVATE ${COMMON_LIBS})
 # -------------------------------
 # 클라이언트 빌드 설정
 # -------------------------------
-set(CLIENT_SOURCES
-    client/client.c
-    client/h3zero_client.c
-    src/logger.c
-    src/h3zero.c
-    src/h3zero_common.c
-    src/h3zero_server_min.c  # ✅ 추가
-    src/pico_webtransport.c
-)
 
-add_executable(mquic_client ${CLIENT_SOURCES})
-target_include_directories(mquic_client PRIVATE ${COMMON_INCLUDE_DIRS})
-target_link_libraries(mquic_client PRIVATE ${COMMON_LIBS})
+set(CLIENT_SOURCES
+    client/frame_client.c         # 우리가 작성한 순수 WT 클라이언트
+    client/h3zero_client.c        # CONNECT 요청 생성기
+    client/h3zero_qpack.c         # 최소 QPACK literal 구현
+    src/h3zero.c                  # H3Zero core (HEADERS parsing 등)
+    src/h3zero_common.c           # 공통 유틸
+    src/pico_webtransport.c       # WebTransport caps 처리
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs/picoquic/picohttp/h3zero_server.c
+
+)
+ 
+ add_executable(mquic_client ${CLIENT_SOURCES})
+ target_include_directories(mquic_client PRIVATE ${COMMON_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/libs/picoquic/picohttp)
+ target_link_libraries(mquic_client PRIVATE ${COMMON_LIBS})
 
 # -------------------------------
 # 빌드 타입 기본값 지정 (Debug)

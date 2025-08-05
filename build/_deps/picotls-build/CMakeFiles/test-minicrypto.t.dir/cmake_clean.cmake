@@ -51,7 +51,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-minicrypto.t.dir/t/minicrypto.c.o.d"
   "CMakeFiles/test-minicrypto.t.dir/t/picotls.c.o"
   "CMakeFiles/test-minicrypto.t.dir/t/picotls.c.o.d"
-  "picotls-probes.h"
   "test-minicrypto.t"
   "test-minicrypto.t.pdb"
 )

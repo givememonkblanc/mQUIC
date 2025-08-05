@@ -24,7 +24,7 @@ endmacro()
 
 ####################################################################################
 
-set(picoquic_VERSION "${PACKAGE_PREFIX_DIR}/0.0.0-69334d2")
+set(picoquic_VERSION "${PACKAGE_PREFIX_DIR}/0.0.0-5de8084")
 set(picoquic_LIBRARIES "${PACKAGE_PREFIX_DIR}/lib/libpicoquic-core.a;${PACKAGE_PREFIX_DIR}/lib/libpicotls-core.a;${PACKAGE_PREFIX_DIR}/lib/libpicotls-fusion.a;${PACKAGE_PREFIX_DIR}/lib/libpicotls-openssl.a;${PACKAGE_PREFIX_DIR}/lib/libpicotls-minicrypto.a")
 set(picoquic_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/include")
 
