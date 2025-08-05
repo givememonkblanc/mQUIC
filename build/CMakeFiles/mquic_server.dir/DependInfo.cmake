@@ -22,9 +22,12 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/takensoft/Desktop/mQUIC/src/h3zero_common.c" "CMakeFiles/mquic_server.dir/src/h3zero_common.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/h3zero_common.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/h3zero_server_min.c" "CMakeFiles/mquic_server.dir/src/h3zero_server_min.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/h3zero_server_min.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/logger.c" "CMakeFiles/mquic_server.dir/src/logger.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/logger.c.o.d"
+  "/home/takensoft/Desktop/mQUIC/src/media_pacer.c" "CMakeFiles/mquic_server.dir/src/media_pacer.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/media_pacer.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/path_algo.c" "CMakeFiles/mquic_server.dir/src/path_algo.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/path_algo.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/pico_webtransport.c" "CMakeFiles/mquic_server.dir/src/pico_webtransport.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/pico_webtransport.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/quic_server.c" "CMakeFiles/mquic_server.dir/src/quic_server.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/quic_server.c.o.d"
+  "/home/takensoft/Desktop/mQUIC/src/streamer.c" "CMakeFiles/mquic_server.dir/src/streamer.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/streamer.c.o.d"
+  "/home/takensoft/Desktop/mQUIC/src/wt_adapter.c" "CMakeFiles/mquic_server.dir/src/wt_adapter.c.o" "gcc" "CMakeFiles/mquic_server.dir/src/wt_adapter.c.o.d"
   "/home/takensoft/Desktop/mQUIC/src/camera.cpp" "CMakeFiles/mquic_server.dir/src/camera.cpp.o" "gcc" "CMakeFiles/mquic_server.dir/src/camera.cpp.o.d"
   )
 

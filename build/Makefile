@@ -1080,6 +1080,30 @@ src/logger.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/logger.c.s
 .PHONY : src/logger.c.s
 
+src/media_pacer.o: src/media_pacer.c.o
+.PHONY : src/media_pacer.o
+
+# target to build an object file
+src/media_pacer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/media_pacer.c.o
+.PHONY : src/media_pacer.c.o
+
+src/media_pacer.i: src/media_pacer.c.i
+.PHONY : src/media_pacer.i
+
+# target to preprocess a source file
+src/media_pacer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/media_pacer.c.i
+.PHONY : src/media_pacer.c.i
+
+src/media_pacer.s: src/media_pacer.c.s
+.PHONY : src/media_pacer.s
+
+# target to generate assembly for a file
+src/media_pacer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/media_pacer.c.s
+.PHONY : src/media_pacer.c.s
+
 src/path_algo.o: src/path_algo.c.o
 .PHONY : src/path_algo.o
 
@@ -1151,6 +1175,54 @@ src/quic_server.s: src/quic_server.c.s
 src/quic_server.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/quic_server.c.s
 .PHONY : src/quic_server.c.s
+
+src/streamer.o: src/streamer.c.o
+.PHONY : src/streamer.o
+
+# target to build an object file
+src/streamer.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/streamer.c.o
+.PHONY : src/streamer.c.o
+
+src/streamer.i: src/streamer.c.i
+.PHONY : src/streamer.i
+
+# target to preprocess a source file
+src/streamer.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/streamer.c.i
+.PHONY : src/streamer.c.i
+
+src/streamer.s: src/streamer.c.s
+.PHONY : src/streamer.s
+
+# target to generate assembly for a file
+src/streamer.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/streamer.c.s
+.PHONY : src/streamer.c.s
+
+src/wt_adapter.o: src/wt_adapter.c.o
+.PHONY : src/wt_adapter.o
+
+# target to build an object file
+src/wt_adapter.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/wt_adapter.c.o
+.PHONY : src/wt_adapter.c.o
+
+src/wt_adapter.i: src/wt_adapter.c.i
+.PHONY : src/wt_adapter.i
+
+# target to preprocess a source file
+src/wt_adapter.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/wt_adapter.c.i
+.PHONY : src/wt_adapter.c.i
+
+src/wt_adapter.s: src/wt_adapter.c.s
+.PHONY : src/wt_adapter.s
+
+# target to generate assembly for a file
+src/wt_adapter.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/wt_adapter.c.s
+.PHONY : src/wt_adapter.c.s
 
 # Help Target
 help:
@@ -1252,6 +1324,9 @@ help:
 	@echo "... src/logger.o"
 	@echo "... src/logger.i"
 	@echo "... src/logger.s"
+	@echo "... src/media_pacer.o"
+	@echo "... src/media_pacer.i"
+	@echo "... src/media_pacer.s"
 	@echo "... src/path_algo.o"
 	@echo "... src/path_algo.i"
 	@echo "... src/path_algo.s"
@@ -1261,6 +1336,12 @@ help:
 	@echo "... src/quic_server.o"
 	@echo "... src/quic_server.i"
 	@echo "... src/quic_server.s"
+	@echo "... src/streamer.o"
+	@echo "... src/streamer.i"
+	@echo "... src/streamer.s"
+	@echo "... src/wt_adapter.o"
+	@echo "... src/wt_adapter.i"
+	@echo "... src/wt_adapter.s"
 .PHONY : help
 
 
