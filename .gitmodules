@@ -1,0 +1,6 @@
+[submodule "libs/libs/picoquic"]
+	path = libs/libs/picoquic
+	url = https://github.com/private-octopus/picoquic.git
+[submodule "libs/picoquic"]
+	path = libs/picoquic
+	url = https://github.com/private-octopus/picoquic.git

@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/picotls-core.dir/lib/certificate_compression.c.o"
+  "CMakeFiles/picotls-core.dir/lib/certificate_compression.c.o.d"
   "CMakeFiles/picotls-core.dir/lib/hpke.c.o"
   "CMakeFiles/picotls-core.dir/lib/hpke.c.o.d"
   "CMakeFiles/picotls-core.dir/lib/pembase64.c.o"
@@ -7,6 +9,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/picotls-core.dir/lib/picotls.c.o.d"
   "libpicotls-core.a"
   "libpicotls-core.pdb"
+  "picotls-probes.h"
 )
 
 # Per-language clean rules from dependency scanning.

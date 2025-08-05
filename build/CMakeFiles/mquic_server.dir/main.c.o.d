@@ -1,3 +1,2 @@
-CMakeFiles/mquic_server.dir/main.c.o: \
- /home/takensoft/Desktop/mQUIC/main.c /usr/include/stdc-predef.h \
- /home/takensoft/Desktop/mQUIC/include/quic_server.h
+CMakeFiles/mquic_server.dir/main.c.o: /Users/dohyeonlim/mQUIC-1/main.c \
+  /Users/dohyeonlim/mQUIC-1/include/quic_server.h
