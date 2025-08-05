@@ -984,6 +984,78 @@ src/camera.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/camera.cpp.s
 .PHONY : src/camera.cpp.s
 
+src/h3zero.o: src/h3zero.c.o
+.PHONY : src/h3zero.o
+
+# target to build an object file
+src/h3zero.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero.c.o
+.PHONY : src/h3zero.c.o
+
+src/h3zero.i: src/h3zero.c.i
+.PHONY : src/h3zero.i
+
+# target to preprocess a source file
+src/h3zero.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero.c.i
+.PHONY : src/h3zero.c.i
+
+src/h3zero.s: src/h3zero.c.s
+.PHONY : src/h3zero.s
+
+# target to generate assembly for a file
+src/h3zero.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero.c.s
+.PHONY : src/h3zero.c.s
+
+src/h3zero_common.o: src/h3zero_common.c.o
+.PHONY : src/h3zero_common.o
+
+# target to build an object file
+src/h3zero_common.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_common.c.o
+.PHONY : src/h3zero_common.c.o
+
+src/h3zero_common.i: src/h3zero_common.c.i
+.PHONY : src/h3zero_common.i
+
+# target to preprocess a source file
+src/h3zero_common.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_common.c.i
+.PHONY : src/h3zero_common.c.i
+
+src/h3zero_common.s: src/h3zero_common.c.s
+.PHONY : src/h3zero_common.s
+
+# target to generate assembly for a file
+src/h3zero_common.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_common.c.s
+.PHONY : src/h3zero_common.c.s
+
+src/h3zero_server_min.o: src/h3zero_server_min.c.o
+.PHONY : src/h3zero_server_min.o
+
+# target to build an object file
+src/h3zero_server_min.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_server_min.c.o
+.PHONY : src/h3zero_server_min.c.o
+
+src/h3zero_server_min.i: src/h3zero_server_min.c.i
+.PHONY : src/h3zero_server_min.i
+
+# target to preprocess a source file
+src/h3zero_server_min.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_server_min.c.i
+.PHONY : src/h3zero_server_min.c.i
+
+src/h3zero_server_min.s: src/h3zero_server_min.c.s
+.PHONY : src/h3zero_server_min.s
+
+# target to generate assembly for a file
+src/h3zero_server_min.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/h3zero_server_min.c.s
+.PHONY : src/h3zero_server_min.c.s
+
 src/logger.o: src/logger.c.o
 .PHONY : src/logger.o
 
@@ -1031,6 +1103,30 @@ src/path_algo.s: src/path_algo.c.s
 src/path_algo.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/path_algo.c.s
 .PHONY : src/path_algo.c.s
+
+src/pico_webtransport.o: src/pico_webtransport.c.o
+.PHONY : src/pico_webtransport.o
+
+# target to build an object file
+src/pico_webtransport.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/pico_webtransport.c.o
+.PHONY : src/pico_webtransport.c.o
+
+src/pico_webtransport.i: src/pico_webtransport.c.i
+.PHONY : src/pico_webtransport.i
+
+# target to preprocess a source file
+src/pico_webtransport.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/pico_webtransport.c.i
+.PHONY : src/pico_webtransport.c.i
+
+src/pico_webtransport.s: src/pico_webtransport.c.s
+.PHONY : src/pico_webtransport.s
+
+# target to generate assembly for a file
+src/pico_webtransport.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/src/pico_webtransport.c.s
+.PHONY : src/pico_webtransport.c.s
 
 src/quic_server.o: src/quic_server.c.o
 .PHONY : src/quic_server.o
@@ -1144,12 +1240,24 @@ help:
 	@echo "... src/camera.o"
 	@echo "... src/camera.i"
 	@echo "... src/camera.s"
+	@echo "... src/h3zero.o"
+	@echo "... src/h3zero.i"
+	@echo "... src/h3zero.s"
+	@echo "... src/h3zero_common.o"
+	@echo "... src/h3zero_common.i"
+	@echo "... src/h3zero_common.s"
+	@echo "... src/h3zero_server_min.o"
+	@echo "... src/h3zero_server_min.i"
+	@echo "... src/h3zero_server_min.s"
 	@echo "... src/logger.o"
 	@echo "... src/logger.i"
 	@echo "... src/logger.s"
 	@echo "... src/path_algo.o"
 	@echo "... src/path_algo.i"
 	@echo "... src/path_algo.s"
+	@echo "... src/pico_webtransport.o"
+	@echo "... src/pico_webtransport.i"
+	@echo "... src/pico_webtransport.s"
 	@echo "... src/quic_server.o"
 	@echo "... src/quic_server.i"
 	@echo "... src/quic_server.s"

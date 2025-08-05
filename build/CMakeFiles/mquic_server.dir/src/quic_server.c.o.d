@@ -86,27 +86,16 @@ CMakeFiles/mquic_server.dir/src/quic_server.c.o: \
  /usr/include/string.h \
  /usr/include/aarch64-linux-gnu/bits/types/locale_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/strings.h /usr/include/stdlib.h \
- /usr/include/aarch64-linux-gnu/bits/waitflags.h \
- /usr/include/aarch64-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/aarch64-linux-gnu/bits/stdlib-float.h \
+ /usr/include/strings.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic.h \
- /usr/include/pthread.h /usr/include/sched.h \
- /usr/include/aarch64-linux-gnu/bits/sched.h \
- /usr/include/aarch64-linux-gnu/bits/types/struct_sched_param.h \
- /usr/include/aarch64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
- /usr/include/aarch64-linux-gnu/bits/time.h \
- /usr/include/aarch64-linux-gnu/bits/types/struct_tm.h \
- /usr/include/aarch64-linux-gnu/bits/types/struct_itimerspec.h \
- /usr/include/aarch64-linux-gnu/bits/setjmp.h \
- /usr/include/aarch64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
- /usr/include/aarch64-linux-gnu/bits/pthread_stack_min-dynamic.h \
- /usr/include/aarch64-linux-gnu/bits/pthread_stack_min.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_utils.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_packet_loop.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picosocks.h \
  /usr/include/getopt.h /usr/include/aarch64-linux-gnu/bits/getopt_ext.h \
+ /usr/include/stdlib.h /usr/include/aarch64-linux-gnu/bits/waitflags.h \
+ /usr/include/aarch64-linux-gnu/bits/waitstatus.h /usr/include/alloca.h \
+ /usr/include/aarch64-linux-gnu/bits/stdlib-float.h \
  /usr/include/aarch64-linux-gnu/sys/time.h /usr/include/errno.h \
  /usr/include/aarch64-linux-gnu/bits/errno.h /usr/include/linux/errno.h \
  /usr/lib/linux/uapi/arm64/asm/errno.h /usr/include/asm-generic/errno.h \
@@ -115,4 +104,21 @@ CMakeFiles/mquic_server.dir/src/quic_server.c.o: \
  /usr/include/rpc/netdb.h \
  /usr/include/aarch64-linux-gnu/bits/types/sigevent_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__sigval_t.h \
- /usr/include/aarch64-linux-gnu/bits/netdb.h /usr/include/netinet/udp.h
+ /usr/include/aarch64-linux-gnu/bits/netdb.h /usr/include/netinet/udp.h \
+ /home/takensoft/Desktop/mQUIC/src/h3zero.h \
+ /home/takensoft/Desktop/mQUIC/src/h3zero_common.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picosplay.h \
+ /home/takensoft/Desktop/mQUIC/src/pico_webtransport.h \
+ /home/takensoft/Desktop/mQUIC/build/_deps/picotls-src/include/picotls.h \
+ /usr/include/assert.h /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/aarch64-linux-gnu/bits/sched.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_sched_param.h \
+ /usr/include/aarch64-linux-gnu/bits/cpu-set.h /usr/include/time.h \
+ /usr/include/aarch64-linux-gnu/bits/time.h \
+ /usr/include/aarch64-linux-gnu/bits/timex.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_tm.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct_itimerspec.h \
+ /usr/include/aarch64-linux-gnu/bits/setjmp.h \
+ /usr/include/aarch64-linux-gnu/bits/types/struct___jmp_buf_tag.h \
+ /usr/include/aarch64-linux-gnu/bits/pthread_stack_min-dynamic.h \
+ /usr/include/aarch64-linux-gnu/bits/pthread_stack_min.h

@@ -1,168 +1,300 @@
 #include "camera.h"
-#include "logger.h" // 로깅 모듈 포함
+#include "logger.h"
 #include "qlog.h"
 #include "picoquic_binlog.h"
+#include "autoqlog.h"
+#include "picoquic.h"
+#include "picoquic_utils.h"
+#include "picoquic_packet_loop.h"
+
+#include "h3zero.h"
+#include "h3zero_common.h"
+#include "pico_webtransport.h"
+
+#include "picotls.h" // ptls_iovec_t
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
-#include <autoqlog.h>
 #include <pthread.h>
-#include <picoquic.h>
-#include <picoquic_utils.h>
-#include <picoquic_packet_loop.h>
+#include <sys/time.h>
+#include <time.h>
+#include <stdint.h>
+#include <stddef.h>
 
-// 애플리케이션의 상태와 리소스를 관리하는 구조체
+static size_t quic_varint_encode(uint64_t v, uint8_t* out)
+{
+    if (v < (1ull << 6)) {
+        out[0] = (uint8_t)v;
+        return 1;
+    } else if (v < (1ull << 14)) {
+        out[0] = 0x40 | (uint8_t)(v >> 8);
+        out[1] = (uint8_t)v;
+        return 2;
+    } else if (v < (1ull << 30)) {
+        out[0] = 0x80 | (uint8_t)(v >> 24);
+        out[1] = (uint8_t)(v >> 16);
+        out[2] = (uint8_t)(v >> 8);
+        out[3] = (uint8_t)v;
+        return 4;
+    } else if (v < (1ull << 62)) {
+        out[0] = 0xC0 | (uint8_t)(v >> 56);
+        out[1] = (uint8_t)(v >> 48);
+        out[2] = (uint8_t)(v >> 40);
+        out[3] = (uint8_t)(v >> 32);
+        out[4] = (uint8_t)(v >> 24);
+        out[5] = (uint8_t)(v >> 16);
+        out[6] = (uint8_t)(v >> 8);
+        out[7] = (uint8_t)v;
+        return 8;
+    }
+    return 0; /* invalid */
+}
+
+/* (선택) 버퍼 용량을 체크하는 안전 버전 */
+static size_t quic_varint_encode_to(uint64_t v, uint8_t* out, size_t out_cap)
+{
+    size_t need =
+        (v < (1ull<<6))  ? 1 :
+        (v < (1ull<<14)) ? 2 :
+        (v < (1ull<<30)) ? 4 :
+        (v < (1ull<<62)) ? 8 : 0;
+
+    if (need == 0 || out_cap < need) return 0;
+    return quic_varint_encode(v, out);
+}
+
+/* ----------------------------- 앱 컨텍스트 ----------------------------- */
 typedef struct {
     camera_handle_t cam_handle;
-    unsigned char* frame_buffer;
-    size_t frame_buffer_size;
-    int is_sending;
-    int frame_count;
-    int max_frames;
+    unsigned char*  frame_buffer;
+    size_t          frame_buffer_size;
 
+    volatile int    is_sending;
+    int             frame_count;
+    int             max_frames;
+
+    /* QUIC/H3/WT 식별자 보관 */
     picoquic_cnx_t* cnx;
-    uint64_t stream_id;
-    void* stream_ctx;
-    int frame_interval_usec;
-    pthread_t scheduler_thread;
+    h3zero_callback_ctx_t* h3ctx;    // WebTransport 콜백 컨텍스트 저장
+    uint64_t        control_stream_id;
+
+    /* 송신 주기 */
+    int             frame_interval_usec;
+
+    /* 송신 스레드 */
+    pthread_t       scheduler_thread;
 } streamer_context_t;
 
-// 프레임 전송을 위한 루프 스레드
-void* streaming_loop(void* arg) {
-    streamer_context_t* ctx = (streamer_context_t*)arg;
-    log_write("LOOP: Streaming thread started.");
-    while (ctx->is_sending) {
-        log_write("LOOP: Marking stream active (stream_id=%llu)...", ctx->stream_id);
-        picoquic_mark_active_stream(ctx->cnx, ctx->stream_id, 1, ctx->stream_ctx);
-        usleep(ctx->frame_interval_usec);
+/* --------------------------- 유틸리티/ALPN ---------------------------- */
+static uint64_t now_ms(void) {
+    struct timeval tv; gettimeofday(&tv, NULL);
+    return ((uint64_t)tv.tv_sec * 1000ull) + (tv.tv_usec / 1000ull);
+}
+
+static size_t my_alpn_select_fn(picoquic_quic_t* quic, ptls_iovec_t* list, size_t count)
+{
+    (void)quic;
+    const char* h3 = "h3";
+    for (size_t i = 0; i < count; i++) {
+        if (list[i].len == strlen(h3) && memcmp(list[i].base, h3, list[i].len) == 0) {
+            return i; /* 'h3' 선택 */
+        }
     }
-    log_write("LOOP: Streaming thread exiting.");
+    return count; /* 선택 안 함 */
+}
+
+/* --------------------------- 프레임 송신 루프 -------------------------- */
+/* 핵심: 프레임당 서버-발(UNI) 스트림 1개 생성 -> JPEG 쓰고 FIN */
+
+static void* streaming_loop(void* arg)
+{
+    streamer_context_t* ctx = (streamer_context_t*)arg;
+    log_write("LOOP: start (WT uni-stream per frame).");
+
+    while (ctx->is_sending) {
+        if (!ctx->cnx || picoquic_get_cnx_state(ctx->cnx) >= picoquic_state_disconnecting) {
+            log_write("LOOP: connection closed.");
+            break;
+        }
+
+        /* 1) 카메라에서 JPEG 한 장 캡처 */
+        int jpeg_size = camera_capture_jpeg(ctx->cam_handle, ctx->frame_buffer, ctx->frame_buffer_size);
+        if (jpeg_size <= 0) { usleep(ctx->frame_interval_usec); continue; }
+
+        /* 2) 서버-유니 스트림 생성 (sid % 4 == 3 이어야 정상) */
+        uint64_t sid = picoquic_get_next_local_stream_id(ctx->cnx, /*is_unidir=*/1);
+        if ((sid & 0x3) != 0x3) {
+            /* 빌드된 라이브러리의 인자 정의가 반대라면 0/1을 바꾸세요 */
+            fprintf(stderr, "FATAL: expected server-uni (sid%%4==3), got sid=%llu\n", (unsigned long long)sid);
+            ctx->is_sending = 0;
+            break;
+        }
+
+        /* 3) WT 유니스트림 헤더: varint 0x54 + varint(session-id=CONNECT stream id) */
+        uint8_t wt_hdr[16]; size_t off = 0;
+        off += quic_varint_encode(0x54, wt_hdr + off);
+        off += quic_varint_encode(ctx->control_stream_id, wt_hdr + off);
+
+        /* 4) 헤더 먼저(FIN=0), JPEG 본문(FIN=1) */
+        int ret = picoquic_add_to_stream(ctx->cnx, sid, wt_hdr, off, /*fin=*/0);
+        if (ret == 0) ret = picoquic_add_to_stream(ctx->cnx, sid, ctx->frame_buffer, (size_t)jpeg_size, /*fin=*/1);
+
+        log_write("FRAME #%d sid=%llu size=%d ret=%d",
+                  ctx->frame_count+1, (unsigned long long)sid, jpeg_size, ret);
+        if (ret != 0) { ctx->is_sending = 0; break; }
+
+        ctx->frame_count++;
+        usleep(ctx->frame_interval_usec);
+        if (ctx->frame_count >= ctx->max_frames) break;
+    }
+
+    ctx->is_sending = 0;
+    log_write("LOOP: exit.");
     return NULL;
 }
 
-// Picoquic 콜백 함수
-int streamer_callback(picoquic_cnx_t* cnx,
+/* ----------------------------- WT 콜백 ------------------------------ */
+/* 클라이언트가 작은 트리거(예: 0x01)를 아무 스트림으로 보내면 송신 시작 */
+static int camera_wt_callback(picoquic_cnx_t* cnx,
     uint64_t stream_id, uint8_t* bytes, size_t length,
-    picoquic_call_back_event_t fin_or_event, void* callback_ctx, void* v_stream_ctx)
+    picoquic_call_back_event_t ev, void* callback_ctx, void* stream_ctx)
 {
+    (void)cnx; (void)bytes; (void)length; (void)stream_ctx;
     streamer_context_t* ctx = (streamer_context_t*)callback_ctx;
 
-    if (length > 0 && strncmp((char*)bytes, "START", length) == 0) {
-        log_write("EVENT: Received 'START' from client. Starting transmission on stream %llu.", stream_id);
-        ctx->is_sending = 1;
-        ctx->frame_count = 0;
-        ctx->cnx = cnx;
-        ctx->stream_id = stream_id;
-        ctx->stream_ctx = v_stream_ctx;
-        pthread_create(&ctx->scheduler_thread, NULL, streaming_loop, ctx);
-        return 0;
-    }
-
-    switch (fin_or_event) {
-        case picoquic_callback_stream_reset:
-        case picoquic_callback_stop_sending:
-        case picoquic_callback_close:
-            log_write("EVENT: Connection closed or reset. Stopping transmission.");
+    switch (ev) {
+    case picoquic_callback_stop_sending:
+    case picoquic_callback_stream_reset:
+        log_write("EV: stream %llu closed -> stop if running", (unsigned long long)stream_id);
+        if (ctx->is_sending) {
             ctx->is_sending = 0;
             pthread_join(ctx->scheduler_thread, NULL);
-            if (v_stream_ctx != NULL) { free(v_stream_ctx); }
-            break;
-
-        case picoquic_callback_ready:
-            log_write("EVENT: Stream %llu is ready. Waiting for 'START' request from client.", stream_id);
-            break;
-
-        case picoquic_callback_prepare_to_send:
-            log_write("CALLBACK: prepare_to_send triggered for stream %llu.", stream_id);
-            if (!ctx->is_sending) break;
-
-            if (ctx->frame_count >= ctx->max_frames) {
-                log_write("INFO: Max frame count reached. Stopping transmission.");
-                ctx->is_sending = 0;
-                break;
-            }
-
-            int jpeg_size = camera_capture_jpeg(ctx->cam_handle, ctx->frame_buffer, ctx->frame_buffer_size);
-            int ret = -1;  // ✅ 여기에 선언 추가
-
-            if (jpeg_size > 0) {
-                int ret = picoquic_add_to_stream(cnx, stream_id, ctx->frame_buffer, jpeg_size, 0);
-                if (ret == 0) {
-                    ctx->frame_count++;
-                    log_write("SENT: Frame %d (%d bytes) on stream %llu.", ctx->frame_count, jpeg_size, stream_id);
-                } else {
-                    log_write("FATAL: picoquic_add_to_stream failed with error %d! Stopping transmission.", ret);
-                    ctx->is_sending = 0;
-                }
-            } else {
-                log_write("ERROR: Failed to add to stream (ret=%d)", ret);
-                ctx->is_sending = 0;
-            }
-            break;
-
-        default:
-            break;
+        }
+        break;
+    default:
+        break;
     }
     return 0;
 }
 
-int run_server() {
+/* -------------------------- /camera PATH 콜백 ------------------------- */
+/* WebTransport CONNECT 수락/설정. 컨트롤 스트림 ID/연결 h3 컨텍스트를 저장 */
+static int camera_path_callback(picoquic_cnx_t* cnx,
+    uint8_t* bytes, size_t length, picohttp_call_back_event_t event,
+    struct st_h3zero_stream_ctx_t* stream_ctx, void* app_ctx)
+{
+    (void)bytes; (void)length;
+    streamer_context_t* ctx = (streamer_context_t*)app_ctx;
+
+    switch (event) {
+    case picohttp_callback_connect:
+        log_write("INFO: /camera CONNECT received (sid=%llu)",
+                  (unsigned long long)stream_ctx->stream_id);
+
+        /* WT 세션 식별자 저장 */
+        ctx->cnx               = cnx;
+        ctx->control_stream_id = stream_ctx->stream_id;     /* == session-id */
+        ctx->h3ctx             = stream_ctx->path_callback_ctx;
+
+        /* (옵션) 스트림 리셋 처리용 콜백 등록 */
+        picoquic_set_callback(cnx, camera_wt_callback, app_ctx);
+
+        /* ✅ 바로 스트리밍 시작 */
+        if (!ctx->is_sending) {
+            ctx->frame_count = 0;
+            ctx->is_sending  = 1;
+            pthread_create(&ctx->scheduler_thread, NULL, streaming_loop, ctx);
+        }
+        break;
+
+    case picohttp_callback_reset:
+        log_write("INFO: /camera context reset -> stop streaming");
+        if (ctx->is_sending) {
+            ctx->is_sending = 0;
+            pthread_join(ctx->scheduler_thread, NULL);
+        }
+        break;
+
+    default:
+        break;
+    }
+    return 0;
+}
+
+/* ------------------------------ 서버 구동 ----------------------------- */
+int run_server(void)
+{
     log_init("streamer_log.txt");
-    log_write("INFO: Streamer starting up...");
+    streamer_context_t ctx;
+    memset(&ctx, 0, sizeof(ctx));
 
-    streamer_context_t streamer_ctx = {0};
-    int ret = 0;
+    ctx.frame_buffer_size   = 1024 * 1024;
+    ctx.frame_buffer        = (unsigned char*)malloc(ctx.frame_buffer_size);
+    ctx.cam_handle          = camera_create();
+    ctx.max_frames          = 1000000000;
+    ctx.frame_interval_usec = 1000 * 100; /* 100 ms ~= 10 fps */
 
-    streamer_ctx.frame_buffer_size = 1024 * 1024;
-    streamer_ctx.frame_buffer = (unsigned char*)malloc(streamer_ctx.frame_buffer_size);
-    if (streamer_ctx.frame_buffer == NULL) {
-        log_write("FATAL: Failed to allocate frame buffer.");
+    /* HTTP/3 + WebTransport 경로 등록 */
+    picohttp_server_path_item_t path_item_list[] = {
+        { "/camera", 7, camera_path_callback, &ctx }
+    };
+
+    picohttp_server_parameters_t server_param;
+    memset(&server_param, 0, sizeof(server_param));
+    server_param.path_table    = path_item_list;
+    server_param.path_table_nb = 1;
+    /* 리비전에 따라 “WebTransport / DATAGRAM 광고” 플래그가 있을 수 있습니다.
+       구조체에 아래 필드가 있으면 1로 설정하세요. (헤더에서 실제 존재 여부 확인) */
+    /* 예시:
+       server_param.enable_webtransport = 1;
+       server_param.enable_h3_datagram  = 1;
+    */
+
+    /* QUIC 컨텍스트 생성 */
+    picoquic_quic_t* quic = picoquic_create(
+        16,               /* nb_connections */
+        "cert.pem",       /* cert */
+        "key.pem",        /* key  */
+        NULL,             /* CN validation file */
+        "h3",             /* ALPN */
+        h3zero_callback,  /* HTTP/3 콜백 */
+        &server_param,    /* HTTP/3 서버 파라미터(경로 테이블 포함) */
+        NULL, NULL, NULL, /* ticket key, cert renew, root key (미사용) */
+        picoquic_current_time(),
+        NULL, NULL, NULL, /* cc algo, qos, cnx_id_callback */
+        0                 /* mtu_max */
+    );
+
+    if (!quic) {
+        log_write("FATAL: picoquic_create failed");
+        camera_destroy(ctx.cam_handle);
+        free(ctx.frame_buffer);
         log_close();
         return -1;
     }
 
-    streamer_ctx.cam_handle = camera_create();
-    if (streamer_ctx.cam_handle == NULL) {
-        log_write("FATAL: Failed to initialize camera.");
-        free(streamer_ctx.frame_buffer);
-        log_close();
-        return -1;
+    /* 로깅(QLOG/BINLOG) 설정 */
+    picoquic_set_binlog(quic, "binlog");
+    picoquic_set_qlog(quic,  "qlogs");
+    picoquic_use_unique_log_names(quic, 1);
+
+    /* ALPN 선택기: h3 우선 */
+    picoquic_set_alpn_select_fn(quic, my_alpn_select_fn);
+
+    log_write("INFO: WebTransport server running on UDP :4433 ...");
+    int ret = picoquic_packet_loop(quic, 4433, 0, 0, 0, 0, NULL, NULL);
+
+    /* 종료 정리 */
+    picoquic_free(quic);
+    if (ctx.is_sending) {
+        ctx.is_sending = 0;
+        pthread_join(ctx.scheduler_thread, NULL);
     }
-
-    streamer_ctx.max_frames = 1000000; // 사실상 무한 전송
-    streamer_ctx.frame_interval_usec = 100000; // 10fps
-
-    log_write("INFO: Camera and frame buffer are ready.");
-
-    picoquic_quic_t* quic = NULL;
-    const char* server_cert_file = "cert.pem";
-    const char* server_key_file = "key.pem";
-    int server_port = 4433;
-
-    quic = picoquic_create(16, server_cert_file, server_key_file, NULL, "mjpeg-stream",
-                           streamer_callback, &streamer_ctx, NULL,NULL, NULL,
-                           picoquic_current_time(), NULL, NULL, NULL, 0);
-
-    if (quic == NULL) {
-        log_write("FATAL: Failed to create picoquic context.");
-        ret = -1;
-    } else {
-        picoquic_set_binlog(quic, "binlog");
-        picoquic_set_qlog(quic, "qlogs");
-        picoquic_use_unique_log_names(quic, 1);
-        log_write("INFO: QUIC server waiting for connections on port %d...", server_port);
-        ret = picoquic_packet_loop(quic, server_port, 0, 0, 0, 0, NULL, NULL);
-        log_write("INFO: Packet loop finished with code %d.", ret);
-    }
-
-    log_write("INFO: Cleaning up resources...");
-    if (quic != NULL) {
-        picoquic_free(quic);
-    }
-    camera_destroy(streamer_ctx.cam_handle);
-    free(streamer_ctx.frame_buffer);
-    log_write("INFO: Streamer shut down.");
+    camera_destroy(ctx.cam_handle);
+    free(ctx.frame_buffer);
     log_close();
-
     return ret;
 }
+

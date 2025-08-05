@@ -19,6 +19,7 @@ include_directories(
     include
     libs/picoquic/loglib       # ✅ QLOG 헤더가 있는 위치
     ${OpenCV_INCLUDE_DIRS}
+    ${CMAKE_BINARY_DIR}/_deps/picotls-src/include   # ✅ 여기에 추가
 )
 
 # 4. 내 소스파일 정의 (qlog.c도 명시적으로 추가)
@@ -29,6 +30,10 @@ set(SOURCES
     src/path_algo.c
     src/camera.cpp
     src/logger.c
+    src/h3zero.c
+    src/h3zero_common.c
+    src/h3zero_server_min.c   # ✅ 추가
+    src/pico_webtransport.c   # ✅ 추가
     libs/picoquic/loglib/qlog.c
     libs/picoquic/loglib/logconvert.c
     libs/picoquic/loglib/logreader.c

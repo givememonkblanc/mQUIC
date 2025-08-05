@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = 
 
-C_INCLUDES = -I/home/takensoft/Desktop/mQUIC/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic_mbedtls -isystem /usr/include/opencv4
+C_INCLUDES = -I/home/takensoft/Desktop/mQUIC/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib -I/home/takensoft/Desktop/mQUIC/build/_deps/picotls-src/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic_mbedtls -isystem /usr/include/opencv4
 
 C_FLAGS = -std=gnu11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/takensoft/Desktop/mQUIC/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic_mbedtls -isystem /usr/include/opencv4
+CXX_INCLUDES = -I/home/takensoft/Desktop/mQUIC/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/loglib -I/home/takensoft/Desktop/mQUIC/build/_deps/picotls-src/include -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic -I/home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic_mbedtls -isystem /usr/include/opencv4
 
 CXX_FLAGS = -std=gnu++17
 
