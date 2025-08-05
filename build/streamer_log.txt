@@ -1,2 +1,4 @@
 [2025-08-05 12:40:36] WT: WARNING — SETTINGS could not enable WebTransport on this build
 [2025-08-05 12:40:36] INFO: WebTransport server :4433 (fps=10, bitrate=8.0 Mbps)
+[2025-08-05 13:25:42] WT: WARNING — SETTINGS could not enable WebTransport on this build
+[2025-08-05 13:25:42] INFO: WebTransport server :4433 (fps=10, bitrate=8.0 Mbps)
