@@ -107,48 +107,70 @@ static size_t my_alpn_select_fn(picoquic_quic_t* quic, ptls_iovec_t* list, size_
 
 /* --------------------------- 프레임 송신 루프 -------------------------- */
 /* 핵심: 프레임당 서버-발(UNI) 스트림 1개 생성 -> JPEG 쓰고 FIN */
-
 static void* streaming_loop(void* arg)
 {
     streamer_context_t* ctx = (streamer_context_t*)arg;
-    log_write("LOOP: start (WT uni-stream per frame).");
+    log_write("LOOP: start (persistent WT uni-stream).");
 
+    const size_t chunk_size = 64 * 1024; // 64KB
+    uint8_t wt_hdr[16];
+    size_t off = 0;
+
+    if (!ctx->cnx) {
+        log_write("ERROR: No connection in streaming_loop");
+        return NULL;
+    }
+
+    /* 1) 유니스트림 한 번만 생성 */
+    uint64_t sid = picoquic_get_next_local_stream_id(ctx->cnx, /*is_unidir=*/1);
+    if ((sid & 0x3) != 0x3) {
+        fprintf(stderr, "FATAL: expected server-uni (sid%%4==3), got sid=%llu\n", (unsigned long long)sid);
+        ctx->is_sending = 0;
+        return NULL;
+    }
+
+    /* 2) WT 헤더 전송 (session id 포함) */
+    off = 0;
+    off += quic_varint_encode(0x54, wt_hdr + off);
+    off += quic_varint_encode(ctx->control_stream_id, wt_hdr + off);
+    picoquic_add_to_stream(ctx->cnx, sid, wt_hdr, off, 0);
+
+    /* 3) 스트리밍 루프 */
     while (ctx->is_sending) {
         if (!ctx->cnx || picoquic_get_cnx_state(ctx->cnx) >= picoquic_state_disconnecting) {
             log_write("LOOP: connection closed.");
             break;
         }
 
-        /* 1) 카메라에서 JPEG 한 장 캡처 */
+        /* 카메라 프레임 캡처 */
         int jpeg_size = camera_capture_jpeg(ctx->cam_handle, ctx->frame_buffer, ctx->frame_buffer_size);
-        if (jpeg_size <= 0) { usleep(ctx->frame_interval_usec); continue; }
 
-        /* 2) 서버-유니 스트림 생성 (sid % 4 == 3 이어야 정상) */
-        uint64_t sid = picoquic_get_next_local_stream_id(ctx->cnx, /*is_unidir=*/1);
-        if ((sid & 0x3) != 0x3) {
-            /* 빌드된 라이브러리의 인자 정의가 반대라면 0/1을 바꾸세요 */
-            fprintf(stderr, "FATAL: expected server-uni (sid%%4==3), got sid=%llu\n", (unsigned long long)sid);
-            ctx->is_sending = 0;
-            break;
+        if (jpeg_size > 0) {
+            /* 64KB씩 분할 전송 */
+            size_t sent = 0;
+            while (sent < (size_t)jpeg_size) {
+                size_t to_send = (jpeg_size - sent > chunk_size) ? chunk_size : (jpeg_size - sent);
+                int ret = picoquic_add_to_stream(ctx->cnx, sid, ctx->frame_buffer + sent, to_send, 0);
+                if (ret != 0) {
+                    log_write("ERROR: add_to_stream failed ret=%d", ret);
+                    ctx->is_sending = 0;
+                    break;
+                }
+                sent += to_send;
+                usleep(2000); // pacing: 2ms
+            }
+        } else {
+            /* 새 프레임 없으면 ping 보내기 */
+            picoquic_add_to_stream(ctx->cnx, sid, (const uint8_t *)"", 0, 0);
+            usleep(5000); // 5ms 대기
         }
 
-        /* 3) WT 유니스트림 헤더: varint 0x54 + varint(session-id=CONNECT stream id) */
-        uint8_t wt_hdr[16]; size_t off = 0;
-        off += quic_varint_encode(0x54, wt_hdr + off);
-        off += quic_varint_encode(ctx->control_stream_id, wt_hdr + off);
-
-        /* 4) 헤더 먼저(FIN=0), JPEG 본문(FIN=1) */
-        int ret = picoquic_add_to_stream(ctx->cnx, sid, wt_hdr, off, /*fin=*/0);
-        if (ret == 0) ret = picoquic_add_to_stream(ctx->cnx, sid, ctx->frame_buffer, (size_t)jpeg_size, /*fin=*/1);
-
-        log_write("FRAME #%d sid=%llu size=%d ret=%d",
-                  ctx->frame_count+1, (unsigned long long)sid, jpeg_size, ret);
-        if (ret != 0) { ctx->is_sending = 0; break; }
-
         ctx->frame_count++;
-        usleep(ctx->frame_interval_usec);
         if (ctx->frame_count >= ctx->max_frames) break;
     }
+
+    /* 4) FIN 전송 */
+    picoquic_add_to_stream(ctx->cnx, sid, NULL, 0, 1);
 
     ctx->is_sending = 0;
     log_write("LOOP: exit.");
@@ -197,6 +219,7 @@ static int camera_path_callback(picoquic_cnx_t* cnx,
         ctx->cnx               = cnx;
         ctx->control_stream_id = stream_ctx->stream_id;     /* == session-id */
         ctx->h3ctx             = stream_ctx->path_callback_ctx;
+        picoquic_enable_keep_alive(cnx, 1000000); // us 단위, 1초마다 PING
 
         /* (옵션) 스트림 리셋 처리용 콜백 등록 */
         picoquic_set_callback(cnx, camera_wt_callback, app_ctx);
@@ -266,7 +289,6 @@ int run_server(void)
         NULL, NULL, NULL, /* cc algo, qos, cnx_id_callback */
         0                 /* mtu_max */
     );
-
     if (!quic) {
         log_write("FATAL: picoquic_create failed");
         camera_destroy(ctx.cam_handle);
