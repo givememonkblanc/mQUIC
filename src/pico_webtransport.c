@@ -42,10 +42,17 @@ static size_t wt_varint_encode(uint64_t v, uint8_t* buf, size_t cap)
 /* ========== SETTINGS/TP 준비 (여기서는 h3zero 기본 설정 사용) ========== */
 void picowt_set_transport_parameters(picoquic_cnx_t* cnx)
 {
-    (void)cnx;
-    /* h3zero는 기본 SETTINGS 프레임에 ENABLE_CONNECT_PROTOCOL, H3_DATAGRAM,
-       WebTransport 관련 항목을 포함하도록 구성되어 있습니다.
-       별도 조정이 필요하면 이 함수에서 확장하세요. RFC 9297의 H3_DATAGRAM=0x33. :contentReference[oaicite:1]{index=1} */
+    if (!cnx) return;
+
+    picoquic_tp_t tp;
+    memset(&tp, 0, sizeof(tp));
+
+    tp.initial_max_data = 64 * 1024 * 1024;            // 전체 연결 윈도우
+    tp.initial_max_stream_data_uni = 16 * 1024 * 1024; // uni-stream 윈도우
+    tp.initial_max_stream_data_bidi_local = 16 * 1024 * 1024;
+    tp.initial_max_stream_data_bidi_remote = 16 * 1024 * 1024;
+
+    picoquic_set_transport_parameters(cnx, &tp);
 }
 
 /* ========== 컨트롤(CONNECT) 스트림 컨텍스트 준비(주로 클라이언트용) ========== */

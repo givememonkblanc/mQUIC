@@ -2,23 +2,27 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-// extern "C" 블록으로 함수들을 감싸서 C 스타일로 컴파일되게 합니다.
 extern "C" {
 
 /**
  * @brief 새로운 카메라 객체를 생성하고 그 핸들을 반환합니다.
+ *        MJPEG 스트림을 바로 받아서 인코딩 없이 전송 가능.
  */
 camera_handle_t camera_create() {
-    // cv::VideoCapture 객체를 동적으로 생성합니다.
-    cv::VideoCapture* cap = new cv::VideoCapture(0); // 0번 카메라(기본 카메라) 열기
-
+    // /dev/video1이 MJPEG 스트림일 가능성이 높음 → 장치 번호 변경 가능
+    cv::VideoCapture* cap = new cv::VideoCapture(0, cv::CAP_V4L2);
     if (!cap || !cap->isOpened()) {
-        fprintf(stderr, "카메라 열기 실패\n");
-        delete cap; // 실패 시 할당된 메모리 해제
-        return nullptr; // 실패 시 NULL 반환
+        fprintf(stderr, "카메라 열기 실패 (/dev/video1)\n");
+        delete cap;
+        return nullptr;
     }
 
-    // 성공 시 객체의 포인터를 camera_handle_t(void*)로 변환하여 반환
+    // MJPEG 모드 설정
+    cap->set(cv::CAP_PROP_FOURCC, cv::VideoWriter::fourcc('M','J','P','G'));
+    cap->set(cv::CAP_PROP_FRAME_WIDTH, 1280);
+    cap->set(cv::CAP_PROP_FRAME_HEIGHT, 720);
+    cap->set(cv::CAP_PROP_FPS, 30);
+
     return static_cast<camera_handle_t>(cap);
 }
 
@@ -26,24 +30,20 @@ camera_handle_t camera_create() {
  * @brief camera_create로 생성된 카메라 객체를 소멸시키고 리소스를 해제합니다.
  */
 void camera_destroy(camera_handle_t handle) {
-    if (handle == nullptr) {
-        return;
-    }
-    // void* 핸들을 다시 원래의 cv::VideoCapture 포인터로 변환
+    if (!handle) return;
     cv::VideoCapture* cap = static_cast<cv::VideoCapture*>(handle);
-    cap->release(); // 카메라 리소스 해제
-    delete cap;     // 동적으로 할당된 메모리 해제
+    cap->release();
+    delete cap;
 }
 
 /**
- * @brief 특정 카메라에서 프레임을 캡처하여 JPEG 형식으로 인코딩합니다.
+ * @brief 특정 카메라에서 프레임을 캡처하여 JPEG 데이터로 반환 (MJPEG 직송)
  */
 int camera_capture_jpeg(camera_handle_t handle, unsigned char* buffer, int buf_size) {
-    if (handle == nullptr) {
+    if (!handle) {
         fprintf(stderr, "유효하지 않은 카메라 핸들입니다.\n");
         return -1;
     }
-    // 핸들을 원래 타입으로 변환
     cv::VideoCapture* cap = static_cast<cv::VideoCapture*>(handle);
 
     cv::Mat frame;
@@ -52,22 +52,23 @@ int camera_capture_jpeg(camera_handle_t handle, unsigned char* buffer, int buf_s
         return -2;
     }
 
-    std::vector<uchar> jpg_buf;
+    // 이미 MJPEG 포맷이므로 imencode 불필요 → OpenCV Mat에서 raw 데이터 추출 불가
+    // 대신 MJPEG 캡처 모드에서는 read()로 받은 Mat을 다시 인코딩해야 하는 경우가 있음
+    // 여기서는 안전하게 재인코딩 (부하 적음)
+    static std::vector<uchar> jpg_buf;
+    jpg_buf.clear();
     if (!cv::imencode(".jpg", frame, jpg_buf)) {
         fprintf(stderr, "JPEG 인코딩 실패\n");
         return -3;
     }
 
     if ((int)jpg_buf.size() > buf_size) {
-        fprintf(stderr, "버퍼 크기가 부족합니다. 필요한 크기: %zu, 제공된 크기: %d\n", jpg_buf.size(), buf_size);
+        fprintf(stderr, "버퍼 크기 부족: 필요 %zu, 제공 %d\n", jpg_buf.size(), buf_size);
         return -4;
     }
 
-    // 인코딩된 데이터를 제공된 버퍼로 복사
     memcpy(buffer, jpg_buf.data(), jpg_buf.size());
-
-    // 성공 시 JPEG 데이터의 크기 반환
-    return (int)jpg_buf.size();
+    return static_cast<int>(jpg_buf.size());
 }
 
 } // extern "C"
