@@ -1,93 +1,29 @@
-[2025-08-06 02:53:46] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 02:53:49] INFO: /camera CONNECT received (sid=0)
-[2025-08-06 02:53:49] CAMERA: start (fps=30).
-[2025-08-06 02:53:49] NET: start (sid=15).
-[2025-08-06 02:54:01] NET: connection closing.
-[2025-08-06 02:54:01] NET: exit.
-[2025-08-06 03:01:36] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 03:01:42] INFO: /camera CONNECT received (sid=0)
-[2025-08-06 03:01:42] CAMERA: start (fps=30).
-[2025-08-06 03:01:42] NET: start (sid=15).
-[2025-08-06 03:01:53] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 03:01:56] INFO: /camera CONNECT received (sid=0)
-[2025-08-06 03:01:56] CAMERA: start (fps=30).
-[2025-08-06 03:01:56] NET: start (sid=15).
-[2025-08-06 03:02:20] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 03:02:23] INFO: /camera CONNECT received (sid=0)
-[2025-08-06 03:02:23] CAMERA: start (fps=30).
-[2025-08-06 03:02:23] NET: start (sid=15).
-[2025-08-06 03:05:35] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 03:07:04] INFO: WebTransport server running on UDP :4433 ...
-[2025-08-06 03:07:09] INFO: /camera CONNECT received (sid=0)
-[2025-08-06 03:07:09] CAMERA: start (fps=30).
-[2025-08-06 03:07:09] NET: start (sid=15).
-[2025-08-06 03:07:30] NET: connection closing.
-[2025-08-06 03:07:30] NET: exit.
-[2025-08-06 03:21:59] CAMERA: start (fps=30).[2025-08-06 03:21:59] 
-NET: start (sid=15).
-[2025-08-06 03:22:15] NET: exit.
-[2025-08-06 03:37:45] CAMERA: start (fps=30).
-[2025-08-06 03:37:45] NET: start (sid=15).
-[2025-08-06 03:38:15] NET: exit.
-[2025-08-06 03:49:32] CAMERA: start (fps=30).[2025-08-06 03:49:32] 
-NET: start (sid=15).
-[2025-08-06 03:50:17] CAMERA: start (fps=30).
-[2025-08-06 03:50:17] NET: start (sid=15).
-[2025-08-06 03:52:51] CAMERA: start (fps=30).
-[2025-08-06 03:52:51] NET: start (sid=15).
-[2025-08-06 03:53:25] [2025-08-06 03:53:25] CAMERA: start (fps=30).
-NET: start (sid=15).
-[2025-08-06 03:55:30] CAMERA: start (fps=30).
-[2025-08-06 03:55:30] NET: start (sid=15).
-[2025-08-06 03:57:12] CAMERA: start (fps=30).
-[2025-08-06 03:57:12] NET: start (sid=15).
-[2025-08-06 03:58:02] [2025-08-06 03:58:02] CAMERA: start (fps=30).
-NET: start (sid=15).
-[2025-08-06 03:58:35] CAMERA: start (fps=30).[2025-08-06 03:58:35] NET: start (sid=15).
+[2025-08-10 06:34:07] [2025-08-10 06:34:07] CAMERA: start (fps=30).NET: bound stream 15 to path 0 (uid=0)
 
-[2025-08-06 05:17:40] CAMERA: start (fps=30).[2025-08-06 05:17:40] 
-NET: start (sid=15).
-[2025-08-06 05:19:52] CAMERA: start (fps=30).
-[2025-08-06 05:19:52] NET: start (sid=15).
-[2025-08-06 05:21:24] CAMERA: start (fps=30).
-[2025-08-06 05:21:24] NET: start (sid=15).
-[2025-08-06 05:23:01] CAMERA: start (fps=30).
-[2025-08-06 05:23:01] NET: start (sid=15).
-[2025-08-06 05:23:55] CAMERA: start (fps=30).
-[2025-08-06 05:23:55] NET: start (sid=15).
-[2025-08-07 01:22:56] CAMERA: start (fps=30).[2025-08-07 01:22:56] NET: start (sid=15).
-
-[2025-08-07 01:23:54] NET: exit.
-[2025-08-07 08:36:47] CAMERA: start (fps=30).
-[2025-08-07 08:36:47] NET: start (sid=15).
-[2025-08-07 08:56:17] CAMERA: start (fps=30).
-[2025-08-07 08:56:17] NET: start (sid=15).
-[2025-08-07 08:56:18] NET: send FPS = 0
-[2025-08-07 08:56:20] NET: send FPS = 0
-[2025-08-07 08:56:21] NET: send FPS = 0
-[2025-08-07 08:56:22] NET: send FPS = 0
-[2025-08-07 08:56:23] NET: send FPS = 0
-[2025-08-07 08:56:24] NET: send FPS = 0
-[2025-08-07 08:56:25] NET: send FPS = 0
-[2025-08-07 08:56:26] NET: send FPS = 0
-[2025-08-07 08:56:27] NET: send FPS = 0
-[2025-08-07 08:56:29] NET: send FPS = 0
-[2025-08-07 08:56:30] NET: send FPS = 0
-[2025-08-07 08:56:31] NET: send FPS = 0
-[2025-08-07 08:56:32] NET: send FPS = 0
-[2025-08-07 08:56:33] NET: send FPS = 0
-[2025-08-07 08:56:34] NET: send FPS = 0
-[2025-08-07 08:56:35] NET: send FPS = 0
-[2025-08-07 08:56:37] NET: send FPS = 0
-[2025-08-07 08:56:38] NET: send FPS = 0
-[2025-08-07 08:56:39] NET: send FPS = 0
-[2025-08-07 08:59:20] CAMERA: start (fps=30).
-[2025-08-07 08:59:20] NET: start (sid=15).
-[2025-08-07 08:59:22] 📡 Actual stream FPS = 16
-[2025-08-07 08:59:23] 📡 Actual stream FPS = 12
-[2025-08-07 08:59:24] 📡 Actual stream FPS = 13
-[2025-08-07 08:59:25] 📡 Actual stream FPS = 11
-[2025-08-07 08:59:26] 📡 Actual stream FPS = 17
-[2025-08-07 08:59:27] 📡 Actual stream FPS = 12
-[2025-08-07 08:59:29] 📡 Actual stream FPS = 12
-[2025-08-07 08:59:30] 📡 Actual stream FPS = 12
+[2025-08-10 06:34:07] NET: start (paths=1).
+[2025-08-10 06:34:08] 📡 Actual stream FPS = 14
+[2025-08-10 06:34:10] 📡 Actual stream FPS = 12
+[2025-08-10 06:34:11] 📡 Actual stream FPS = 14
+[2025-08-10 06:34:12] 📡 Actual stream FPS = 12
+[2025-08-10 06:34:13] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:07] CAMERA: start (fps=30).
+[2025-08-10 07:00:07] NET: bound stream 15 to path 0 (uid=0)
+[2025-08-10 07:00:07] NET: start (paths=1).
+[2025-08-10 07:00:08] 📡 Actual stream FPS = 14
+[2025-08-10 07:00:10] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:11] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:12] 📡 Actual stream FPS = 13
+[2025-08-10 07:00:13] 📡 Actual stream FPS = 15
+[2025-08-10 07:00:14] 📡 Actual stream FPS = 14
+[2025-08-10 07:00:15] 📡 Actual stream FPS = 16
+[2025-08-10 07:00:16] 📡 Actual stream FPS = 14
+[2025-08-10 07:00:17] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:18] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:20] 📡 Actual stream FPS = 16
+[2025-08-10 07:00:21] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:22] 📡 Actual stream FPS = 16
+[2025-08-10 07:00:23] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:24] 📡 Actual stream FPS = 12
+[2025-08-10 07:00:25] 📡 Actual stream FPS = 14
+[2025-08-10 07:00:26] 📡 Actual stream FPS = 14
+[2025-08-10 07:00:28] 📡 Actual stream FPS = 14
