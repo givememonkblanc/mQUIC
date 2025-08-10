@@ -97,4 +97,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
 #endif /* PICO_WEBTRANSPORT_H */

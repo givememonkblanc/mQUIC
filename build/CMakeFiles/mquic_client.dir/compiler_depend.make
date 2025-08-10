@@ -669,8 +669,24 @@ CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/m
   /usr/include/string.h \
   /usr/include/aarch64-linux-gnu/bits/types/locale_t.h \
   /usr/include/aarch64-linux-gnu/bits/types/__locale_t.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  /usr/include/math.h \
+  /usr/include/aarch64-linux-gnu/bits/math-vector.h \
+  /usr/include/aarch64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/aarch64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/aarch64-linux-gnu/bits/fp-logb.h \
+  /usr/include/aarch64-linux-gnu/bits/fp-fast.h \
+  /usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/aarch64-linux-gnu/bits/mathcalls.h
 
+
+/usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h:
+
+/usr/include/aarch64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/aarch64-linux-gnu/bits/math-vector.h:
+
+/usr/include/math.h:
 
 /home/takensoft/Desktop/mQUIC/src/h3zero_common.c:
 
@@ -709,6 +725,8 @@ CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/m
 /usr/include/aarch64-linux-gnu/bits/errno.h:
 
 /usr/include/errno.h:
+
+/usr/include/aarch64-linux-gnu/bits/fp-logb.h:
 
 /usr/include/aarch64-linux-gnu/bits/getopt_ext.h:
 
@@ -820,6 +838,8 @@ CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/m
 
 /usr/include/aarch64-linux-gnu/bits/waitstatus.h:
 
+/usr/include/aarch64-linux-gnu/bits/fp-fast.h:
+
 /usr/include/aarch64-linux-gnu/bits/types/sigevent_t.h:
 
 /home/takensoft/Desktop/mQUIC/src/pico_webtransport.h:
@@ -869,6 +889,8 @@ _deps/picotls-src/include/picotls.h:
 /usr/lib/linux/uapi/arm64/asm/posix_types.h:
 
 /usr/include/aarch64-linux-gnu/bits/sigaction.h:
+
+/usr/include/aarch64-linux-gnu/bits/mathcalls.h:
 
 /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/tls_api.h:
 
@@ -975,6 +997,8 @@ _deps/picotls-src/include/picotls.h:
 /usr/include/aarch64-linux-gnu/bits/select.h:
 
 /usr/include/arpa/inet.h:
+
+/usr/include/aarch64-linux-gnu/bits/flt-eval-method.h:
 
 /usr/include/aarch64-linux-gnu/bits/environments.h:
 
