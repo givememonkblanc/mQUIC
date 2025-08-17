@@ -1712,6 +1712,9 @@ CMakeFiles/mquic_server.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/m
   /usr/include/aarch64-linux-gnu/bits/getopt_core.h \
   /usr/include/aarch64-linux-gnu/bits/unistd_ext.h \
   /home/takensoft/Desktop/mQUIC/src/h3zero.h \
+  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_utils.h \
+  /usr/include/inttypes.h \
+  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic.h \
   /usr/include/stdlib.h \
   /usr/include/aarch64-linux-gnu/bits/waitflags.h \
   /usr/include/aarch64-linux-gnu/bits/waitstatus.h \
@@ -1720,15 +1723,7 @@ CMakeFiles/mquic_server.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/m
   /usr/include/string.h \
   /usr/include/aarch64-linux-gnu/bits/types/locale_t.h \
   /usr/include/aarch64-linux-gnu/bits/types/__locale_t.h \
-  /usr/include/strings.h \
-  /usr/include/math.h \
-  /usr/include/aarch64-linux-gnu/bits/math-vector.h \
-  /usr/include/aarch64-linux-gnu/bits/libm-simd-decl-stubs.h \
-  /usr/include/aarch64-linux-gnu/bits/flt-eval-method.h \
-  /usr/include/aarch64-linux-gnu/bits/fp-logb.h \
-  /usr/include/aarch64-linux-gnu/bits/fp-fast.h \
-  /usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h \
-  /usr/include/aarch64-linux-gnu/bits/mathcalls.h
+  /usr/include/strings.h
 
 CMakeFiles/mquic_server.dir/src/quic_server.c.o: /home/takensoft/Desktop/mQUIC/src/quic_server.c \
   /usr/include/stdc-predef.h \
