@@ -1,3 +1,0 @@
-/home/takensoft/Desktop/mQUIC/build/_deps/picotls-subbuild/CMakeFiles/picotls-populate.dir
-/home/takensoft/Desktop/mQUIC/build/_deps/picotls-subbuild/CMakeFiles/edit_cache.dir
-/home/takensoft/Desktop/mQUIC/build/_deps/picotls-subbuild/CMakeFiles/rebuild_cache.dir
