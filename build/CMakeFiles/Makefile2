@@ -169,12 +169,12 @@ CMakeFiles/mquic_server.dir/all: _deps/picotls-build/CMakeFiles/picotls-minicryp
 CMakeFiles/mquic_server.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=6,7,8,9,10,11,12,13,14,15 "Built target mquic_server"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=11,12,13,14,15,16,17,18,19,20 "Built target mquic_server"
 .PHONY : CMakeFiles/mquic_server.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mquic_server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 49
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 48
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mquic_server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : CMakeFiles/mquic_server.dir/rule
@@ -198,12 +198,12 @@ CMakeFiles/mquic_client.dir/all: _deps/picotls-build/CMakeFiles/picotls-minicryp
 CMakeFiles/mquic_client.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=2,3,4,5 "Built target mquic_client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=2,3,4,5,6,7,8,9,10 "Built target mquic_client"
 .PHONY : CMakeFiles/mquic_client.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mquic_client.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 43
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 47
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/mquic_client.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : CMakeFiles/mquic_client.dir/rule
@@ -226,12 +226,12 @@ libs/picoquic/CMakeFiles/picoquic-core.dir/all: _deps/picotls-build/CMakeFiles/p
 libs/picoquic/CMakeFiles/picoquic-core.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquic-core.dir/build.make libs/picoquic/CMakeFiles/picoquic-core.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquic-core.dir/build.make libs/picoquic/CMakeFiles/picoquic-core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46 "Built target picoquic-core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49 "Built target picoquic-core"
 .PHONY : libs/picoquic/CMakeFiles/picoquic-core.dir/all
 
 # Build rule for subdir invocation for target.
 libs/picoquic/CMakeFiles/picoquic-core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 39
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 38
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/picoquic/CMakeFiles/picoquic-core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : libs/picoquic/CMakeFiles/picoquic-core.dir/rule
@@ -252,7 +252,7 @@ libs/picoquic/CMakeFiles/picoquic-core.dir/clean:
 libs/picoquic/CMakeFiles/picoquic-log.dir/all:
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquic-log.dir/build.make libs/picoquic/CMakeFiles/picoquic-log.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquic-log.dir/build.make libs/picoquic/CMakeFiles/picoquic-log.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=47,48,49,50,51 "Built target picoquic-log"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=50,51,52,53,54 "Built target picoquic-log"
 .PHONY : libs/picoquic/CMakeFiles/picoquic-log.dir/all
 
 # Build rule for subdir invocation for target.
@@ -281,12 +281,12 @@ libs/picoquic/CMakeFiles/picohttp-core.dir/all: _deps/picotls-build/CMakeFiles/p
 libs/picoquic/CMakeFiles/picohttp-core.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picohttp-core.dir/build.make libs/picoquic/CMakeFiles/picohttp-core.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picohttp-core.dir/build.make libs/picoquic/CMakeFiles/picohttp-core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=16,17,18,19,20,21,22 "Built target picohttp-core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=21,22,23,24,25,26 "Built target picohttp-core"
 .PHONY : libs/picoquic/CMakeFiles/picohttp-core.dir/all
 
 # Build rule for subdir invocation for target.
 libs/picoquic/CMakeFiles/picohttp-core.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 46
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 44
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/picoquic/CMakeFiles/picohttp-core.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : libs/picoquic/CMakeFiles/picohttp-core.dir/rule
@@ -312,12 +312,12 @@ libs/picoquic/CMakeFiles/picoquicdemo.dir/all: _deps/picotls-build/CMakeFiles/pi
 libs/picoquic/CMakeFiles/picoquicdemo.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquicdemo.dir/build.make libs/picoquic/CMakeFiles/picoquicdemo.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picoquicdemo.dir/build.make libs/picoquic/CMakeFiles/picoquicdemo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=52,53 "Built target picoquicdemo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=55 "Built target picoquicdemo"
 .PHONY : libs/picoquic/CMakeFiles/picoquicdemo.dir/all
 
 # Build rule for subdir invocation for target.
 libs/picoquic/CMakeFiles/picoquicdemo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 53
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 50
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/picoquic/CMakeFiles/picoquicdemo.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : libs/picoquic/CMakeFiles/picoquicdemo.dir/rule
@@ -342,12 +342,12 @@ libs/picoquic/CMakeFiles/picolog_t.dir/all: _deps/picotls-build/CMakeFiles/picot
 libs/picoquic/CMakeFiles/picolog_t.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picolog_t.dir/build.make libs/picoquic/CMakeFiles/picolog_t.dir/depend
 	$(MAKE) $(MAKESILENT) -f libs/picoquic/CMakeFiles/picolog_t.dir/build.make libs/picoquic/CMakeFiles/picolog_t.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=23 "Built target picolog_t"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=27 "Built target picolog_t"
 .PHONY : libs/picoquic/CMakeFiles/picolog_t.dir/all
 
 # Build rule for subdir invocation for target.
 libs/picoquic/CMakeFiles/picolog_t.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 45
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 44
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libs/picoquic/CMakeFiles/picolog_t.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : libs/picoquic/CMakeFiles/picolog_t.dir/rule
@@ -1122,7 +1122,7 @@ libs/picoquic/CMakeFiles/clangformat.dir/clean:
 _deps/picotls-build/CMakeFiles/picotls-core.dir/all:
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-core.dir/build.make _deps/picotls-build/CMakeFiles/picotls-core.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-core.dir/build.make _deps/picotls-build/CMakeFiles/picotls-core.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=54,55 "Built target picotls-core"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=56,57 "Built target picotls-core"
 .PHONY : _deps/picotls-build/CMakeFiles/picotls-core.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1148,7 +1148,7 @@ _deps/picotls-build/CMakeFiles/picotls-core.dir/clean:
 _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/all: _deps/picotls-build/CMakeFiles/picotls-core.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/build.make _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/build.make _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=56,57,58,59,60,61,62,63,64,65,66,67,68 "Built target picotls-minicrypto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=58,59,60,61,62,63,64,65,66,67,68,69,70 "Built target picotls-minicrypto"
 .PHONY : _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1174,12 +1174,12 @@ _deps/picotls-build/CMakeFiles/picotls-minicrypto.dir/clean:
 _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/all:
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/build.make _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/build.make _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=71,72,73,74,75,76,77,78,79,80,81,82,83,84 "Built target test-minicrypto.t"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=73,74,75,76,77,78,79,80,81,82,83,84,85 "Built target test-minicrypto.t"
 .PHONY : _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/all
 
 # Build rule for subdir invocation for target.
 _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 14
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 13
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/rule
@@ -1200,7 +1200,7 @@ _deps/picotls-build/CMakeFiles/test-minicrypto.t.dir/clean:
 _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all: _deps/picotls-build/CMakeFiles/picotls-core.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-openssl.dir/build.make _deps/picotls-build/CMakeFiles/picotls-openssl.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/picotls-openssl.dir/build.make _deps/picotls-build/CMakeFiles/picotls-openssl.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=69 "Built target picotls-openssl"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=71 "Built target picotls-openssl"
 .PHONY : _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1253,12 +1253,12 @@ _deps/picotls-build/CMakeFiles/cli.dir/clean:
 _deps/picotls-build/CMakeFiles/test-openssl.t.dir/all:
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/test-openssl.t.dir/build.make _deps/picotls-build/CMakeFiles/test-openssl.t.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/test-openssl.t.dir/build.make _deps/picotls-build/CMakeFiles/test-openssl.t.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Built target test-openssl.t"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=86,87,88,89,90,91,92,93,94,95,96,97,98,99,100 "Built target test-openssl.t"
 .PHONY : _deps/picotls-build/CMakeFiles/test-openssl.t.dir/all
 
 # Build rule for subdir invocation for target.
 _deps/picotls-build/CMakeFiles/test-openssl.t.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 16
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 15
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/picotls-build/CMakeFiles/test-openssl.t.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : _deps/picotls-build/CMakeFiles/test-openssl.t.dir/rule
@@ -1281,7 +1281,7 @@ _deps/picotls-build/CMakeFiles/ptlsbench.dir/all: _deps/picotls-build/CMakeFiles
 _deps/picotls-build/CMakeFiles/ptlsbench.dir/all: _deps/picotls-build/CMakeFiles/picotls-openssl.dir/all
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/ptlsbench.dir/build.make _deps/picotls-build/CMakeFiles/ptlsbench.dir/depend
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/ptlsbench.dir/build.make _deps/picotls-build/CMakeFiles/ptlsbench.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=70 "Built target ptlsbench"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=72 "Built target ptlsbench"
 .PHONY : _deps/picotls-build/CMakeFiles/ptlsbench.dir/all
 
 # Build rule for subdir invocation for target.
@@ -1314,7 +1314,7 @@ _deps/picotls-build/CMakeFiles/check.dir/all: _deps/picotls-build/CMakeFiles/tes
 
 # Build rule for subdir invocation for target.
 _deps/picotls-build/CMakeFiles/check.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 34
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 32
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 _deps/picotls-build/CMakeFiles/check.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/takensoft/Desktop/mQUIC/build/CMakeFiles 0
 .PHONY : _deps/picotls-build/CMakeFiles/check.dir/rule

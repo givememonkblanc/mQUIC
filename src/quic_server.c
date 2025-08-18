@@ -440,6 +440,7 @@ static int camera_path_callback(picoquic_cnx_t* cnx,
 /* =============================== SERVER ============================== */
 int run_server(void)
 {
+    fprintf(stderr, "[서버-로그] 1. 서버 초기화를 시작합니다...\n");
     log_init("streamer_log.txt");
 
     streamer_context_t ctx;
@@ -450,7 +451,7 @@ int run_server(void)
     for (int i = 0; i < 2; i++) {
         ctx.frame_buffer[i] = (unsigned char*)malloc(ctx.frame_buffer_size);
         if (!ctx.frame_buffer[i]) {
-            fprintf(stderr, "malloc failed for frame_buffer[%d]\n", i);
+            fprintf(stderr, "[서버-오류] 프레임 버퍼[%d] 메모리 할당 실패\n", i);
             for (int j = 0; j < i; j++) free(ctx.frame_buffer[j]);
             return -1;
         }
@@ -463,12 +464,13 @@ int run_server(void)
 
     ctx.cam_handle = camera_create();
     if (!ctx.cam_handle) {
-        fprintf(stderr, "camera_create() failed\n");
+        fprintf(stderr, "[서버-오류] camera_create() 실패\n");
         pthread_mutex_destroy(&ctx.fb_lock);
         for (int i = 0; i < 2; i++) free(ctx.frame_buffer[i]);
         return -1;
     }
     ctx.max_frames = MAX_FRAMES_DEFAULT;
+    fprintf(stderr, "[서버-로그] 2. 버퍼 및 카메라 초기화 완료.\n");
 
     /* H3 path 테이블 */
     picohttp_server_path_item_t path_item_list[] = {
@@ -480,18 +482,21 @@ int run_server(void)
     server_param.path_table_nb = 1;
 
     /* QUIC 인스턴스 */
+    fprintf(stderr, "[서버-로그] 3. QUIC 컨텍스트 생성을 시도합니다...\n");
     picoquic_quic_t* quic = picoquic_create(
         16, "cert.pem", "key.pem", NULL, "h3",
         h3zero_callback, &server_param, NULL, NULL, NULL,
         picoquic_current_time(), NULL, NULL, NULL, 0
     );
     if (!quic) {
-        fprintf(stderr, "picoquic_create() failed\n");
+        fprintf(stderr, "[서버-오류] picoquic_create() 실패. 현재 폴더에 cert.pem, key.pem 파일이 있는지 확인하세요.\n");
         camera_destroy(ctx.cam_handle);
         pthread_mutex_destroy(&ctx.fb_lock);
         for (int i = 0; i < 2; i++) free(ctx.frame_buffer[i]);
         return -1;
     }
+    fprintf(stderr, "[서버-로그] 3. QUIC 컨텍스트 생성 성공.\n");
+
     /* 🔽🔽 추가: 서버 전역 기본 TP에 멀티패스 켜기 */
     picoquic_tp_t tp; memset(&tp, 0, sizeof(tp));
     picoquic_init_transport_parameters(&tp, 1);
@@ -499,15 +504,20 @@ int run_server(void)
     tp.initial_max_path_id  = 3;
     tp.enable_time_stamp    = 3;
     picoquic_set_default_tp(quic, &tp);
-    
+    fprintf(stderr, "[서버-로그] 4. 멀티패스 전송 파라미터 설정 완료.\n");
+
     /* 로깅 & ALPN */
+    picoquic_set_log_level(quic, 1); // <<< 상세 로그 레벨 설정
     picoquic_set_binlog(quic, "binlog");
     picoquic_set_qlog(quic,  "qlogs");
     picoquic_use_unique_log_names(quic, 1);
     picoquic_set_alpn_select_fn(quic, my_alpn_select_fn);
+    fprintf(stderr, "[서버-로그] 5. 로깅 및 콜백 설정 완료.\n");
 
     /* 패킷 루프 */
+    fprintf(stderr, "[서버-로그] 6. UDP 포트 4433에서 패킷 루프를 시작합니다. 클라이언트 접속 대기 중...\n");
     int ret = picoquic_packet_loop(quic, 4433, 0, 0, 0, 0, NULL, NULL);
+    fprintf(stderr, "[서버-로그] 7. 패킷 루프가 종료되었습니다 (반환 코드: %d).\n", ret);
 
     /* 정리 */
     picoquic_free(quic);
@@ -521,5 +531,6 @@ int run_server(void)
     pthread_mutex_destroy(&ctx.fb_lock);
     for (int i = 0; i < 2; i++) free(ctx.frame_buffer[i]);
     log_close();
+    fprintf(stderr, "[서버-로그] 8. 모든 리소스를 정리하고 종료합니다.\n");
     return ret;
 }

@@ -69,24 +69,66 @@ include CMakeFiles/mquic_client.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/mquic_client.dir/flags.make
 
-CMakeFiles/mquic_client.dir/client/frame_client.c.o: CMakeFiles/mquic_client.dir/flags.make
-CMakeFiles/mquic_client.dir/client/frame_client.c.o: /home/takensoft/Desktop/mQUIC/client/frame_client.c
-CMakeFiles/mquic_client.dir/client/frame_client.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mquic_client.dir/client/frame_client.c.o"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/frame_client.c.o -MF CMakeFiles/mquic_client.dir/client/frame_client.c.o.d -o CMakeFiles/mquic_client.dir/client/frame_client.c.o -c /home/takensoft/Desktop/mQUIC/client/frame_client.c
+CMakeFiles/mquic_client.dir/client/client_main.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/client/client_main.c.o: /home/takensoft/Desktop/mQUIC/client/client_main.c
+CMakeFiles/mquic_client.dir/client/client_main.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/mquic_client.dir/client/client_main.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/client_main.c.o -MF CMakeFiles/mquic_client.dir/client/client_main.c.o.d -o CMakeFiles/mquic_client.dir/client/client_main.c.o -c /home/takensoft/Desktop/mQUIC/client/client_main.c
 
-CMakeFiles/mquic_client.dir/client/frame_client.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/client/frame_client.c.i"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/client/frame_client.c > CMakeFiles/mquic_client.dir/client/frame_client.c.i
+CMakeFiles/mquic_client.dir/client/client_main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/client/client_main.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/client/client_main.c > CMakeFiles/mquic_client.dir/client/client_main.c.i
 
-CMakeFiles/mquic_client.dir/client/frame_client.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/client/frame_client.c.s"
-	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/client/frame_client.c -o CMakeFiles/mquic_client.dir/client/frame_client.c.s
+CMakeFiles/mquic_client.dir/client/client_main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/client/client_main.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/client/client_main.c -o CMakeFiles/mquic_client.dir/client/client_main.c.s
+
+CMakeFiles/mquic_client.dir/client/tls_trust.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/client/tls_trust.c.o: /home/takensoft/Desktop/mQUIC/client/tls_trust.c
+CMakeFiles/mquic_client.dir/client/tls_trust.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mquic_client.dir/client/tls_trust.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/tls_trust.c.o -MF CMakeFiles/mquic_client.dir/client/tls_trust.c.o.d -o CMakeFiles/mquic_client.dir/client/tls_trust.c.o -c /home/takensoft/Desktop/mQUIC/client/tls_trust.c
+
+CMakeFiles/mquic_client.dir/client/tls_trust.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/client/tls_trust.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/client/tls_trust.c > CMakeFiles/mquic_client.dir/client/tls_trust.c.i
+
+CMakeFiles/mquic_client.dir/client/tls_trust.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/client/tls_trust.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/client/tls_trust.c -o CMakeFiles/mquic_client.dir/client/tls_trust.c.s
+
+CMakeFiles/mquic_client.dir/client/wt_callback.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/client/wt_callback.c.o: /home/takensoft/Desktop/mQUIC/client/wt_callback.c
+CMakeFiles/mquic_client.dir/client/wt_callback.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/mquic_client.dir/client/wt_callback.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/wt_callback.c.o -MF CMakeFiles/mquic_client.dir/client/wt_callback.c.o.d -o CMakeFiles/mquic_client.dir/client/wt_callback.c.o -c /home/takensoft/Desktop/mQUIC/client/wt_callback.c
+
+CMakeFiles/mquic_client.dir/client/wt_callback.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/client/wt_callback.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/client/wt_callback.c > CMakeFiles/mquic_client.dir/client/wt_callback.c.i
+
+CMakeFiles/mquic_client.dir/client/wt_callback.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/client/wt_callback.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/client/wt_callback.c -o CMakeFiles/mquic_client.dir/client/wt_callback.c.s
+
+CMakeFiles/mquic_client.dir/client/wt_client.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/client/wt_client.c.o: /home/takensoft/Desktop/mQUIC/client/wt_client.c
+CMakeFiles/mquic_client.dir/client/wt_client.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/mquic_client.dir/client/wt_client.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/wt_client.c.o -MF CMakeFiles/mquic_client.dir/client/wt_client.c.o.d -o CMakeFiles/mquic_client.dir/client/wt_client.c.o -c /home/takensoft/Desktop/mQUIC/client/wt_client.c
+
+CMakeFiles/mquic_client.dir/client/wt_client.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/client/wt_client.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/client/wt_client.c > CMakeFiles/mquic_client.dir/client/wt_client.c.i
+
+CMakeFiles/mquic_client.dir/client/wt_client.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/client/wt_client.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/client/wt_client.c -o CMakeFiles/mquic_client.dir/client/wt_client.c.s
 
 CMakeFiles/mquic_client.dir/client/h3zero_client.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/client/h3zero_client.c.o: /home/takensoft/Desktop/mQUIC/client/h3zero_client.c
 CMakeFiles/mquic_client.dir/client/h3zero_client.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/mquic_client.dir/client/h3zero_client.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/mquic_client.dir/client/h3zero_client.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/h3zero_client.c.o -MF CMakeFiles/mquic_client.dir/client/h3zero_client.c.o.d -o CMakeFiles/mquic_client.dir/client/h3zero_client.c.o -c /home/takensoft/Desktop/mQUIC/client/h3zero_client.c
 
 CMakeFiles/mquic_client.dir/client/h3zero_client.c.i: cmake_force
@@ -100,7 +142,7 @@ CMakeFiles/mquic_client.dir/client/h3zero_client.c.s: cmake_force
 CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o: /home/takensoft/Desktop/mQUIC/client/h3zero_qpack.c
 CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o -MF CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o.d -o CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o -c /home/takensoft/Desktop/mQUIC/client/h3zero_qpack.c
 
 CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.i: cmake_force
@@ -114,7 +156,7 @@ CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.s: cmake_force
 CMakeFiles/mquic_client.dir/src/h3zero.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/src/h3zero.c.o: /home/takensoft/Desktop/mQUIC/src/h3zero.c
 CMakeFiles/mquic_client.dir/src/h3zero.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/mquic_client.dir/src/h3zero.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/mquic_client.dir/src/h3zero.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/src/h3zero.c.o -MF CMakeFiles/mquic_client.dir/src/h3zero.c.o.d -o CMakeFiles/mquic_client.dir/src/h3zero.c.o -c /home/takensoft/Desktop/mQUIC/src/h3zero.c
 
 CMakeFiles/mquic_client.dir/src/h3zero.c.i: cmake_force
@@ -128,7 +170,7 @@ CMakeFiles/mquic_client.dir/src/h3zero.c.s: cmake_force
 CMakeFiles/mquic_client.dir/src/h3zero_common.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/src/h3zero_common.c.o: /home/takensoft/Desktop/mQUIC/src/h3zero_common.c
 CMakeFiles/mquic_client.dir/src/h3zero_common.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/mquic_client.dir/src/h3zero_common.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/mquic_client.dir/src/h3zero_common.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/src/h3zero_common.c.o -MF CMakeFiles/mquic_client.dir/src/h3zero_common.c.o.d -o CMakeFiles/mquic_client.dir/src/h3zero_common.c.o -c /home/takensoft/Desktop/mQUIC/src/h3zero_common.c
 
 CMakeFiles/mquic_client.dir/src/h3zero_common.c.i: cmake_force
@@ -142,7 +184,7 @@ CMakeFiles/mquic_client.dir/src/h3zero_common.c.s: cmake_force
 CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: /home/takensoft/Desktop/mQUIC/src/pico_webtransport.c
 CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o -MF CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o.d -o CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o -c /home/takensoft/Desktop/mQUIC/src/pico_webtransport.c
 
 CMakeFiles/mquic_client.dir/src/pico_webtransport.c.i: cmake_force
@@ -153,10 +195,122 @@ CMakeFiles/mquic_client.dir/src/pico_webtransport.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/src/pico_webtransport.c.s"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/src/pico_webtransport.c -o CMakeFiles/mquic_client.dir/src/pico_webtransport.c.s
 
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/qlog.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/qlog.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/qlog.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/qlog.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logconvert.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logconvert.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logconvert.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logconvert.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logreader.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logreader.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logreader.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/logreader.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/memory_log.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/memory_log.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/memory_log.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/memory_log.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/cidset.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/cidset.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/cidset.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/cidset.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/csv.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/csv.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/csv.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/csv.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/svg.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/svg.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/svg.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/svg.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.s
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o: CMakeFiles/mquic_client.dir/flags.make
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.c
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.c
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.c > CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.i
+
+CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/takensoft/Desktop/mQUIC/libs/picoquic/loglib/autoqlog.c -o CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.s
+
 CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o: CMakeFiles/mquic_client.dir/flags.make
 CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o: /home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero_server.c
 CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o: CMakeFiles/mquic_client.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building C object CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o -MF CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o.d -o CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o -c /home/takensoft/Desktop/mQUIC/libs/picoquic/picohttp/h3zero_server.c
 
 CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.i: cmake_force
@@ -169,23 +323,45 @@ CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.s: cmake_forc
 
 # Object files for target mquic_client
 mquic_client_OBJECTS = \
-"CMakeFiles/mquic_client.dir/client/frame_client.c.o" \
+"CMakeFiles/mquic_client.dir/client/client_main.c.o" \
+"CMakeFiles/mquic_client.dir/client/tls_trust.c.o" \
+"CMakeFiles/mquic_client.dir/client/wt_callback.c.o" \
+"CMakeFiles/mquic_client.dir/client/wt_client.c.o" \
 "CMakeFiles/mquic_client.dir/client/h3zero_client.c.o" \
 "CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o" \
 "CMakeFiles/mquic_client.dir/src/h3zero.c.o" \
 "CMakeFiles/mquic_client.dir/src/h3zero_common.c.o" \
 "CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o" \
+"CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o" \
 "CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o"
 
 # External object files for target mquic_client
 mquic_client_EXTERNAL_OBJECTS =
 
-mquic_client: CMakeFiles/mquic_client.dir/client/frame_client.c.o
+mquic_client: CMakeFiles/mquic_client.dir/client/client_main.c.o
+mquic_client: CMakeFiles/mquic_client.dir/client/tls_trust.c.o
+mquic_client: CMakeFiles/mquic_client.dir/client/wt_callback.c.o
+mquic_client: CMakeFiles/mquic_client.dir/client/wt_client.c.o
 mquic_client: CMakeFiles/mquic_client.dir/client/h3zero_client.c.o
 mquic_client: CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.o
 mquic_client: CMakeFiles/mquic_client.dir/src/h3zero.c.o
 mquic_client: CMakeFiles/mquic_client.dir/src/h3zero_common.c.o
 mquic_client: CMakeFiles/mquic_client.dir/src/pico_webtransport.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o
+mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o
 mquic_client: CMakeFiles/mquic_client.dir/libs/picoquic/picohttp/h3zero_server.c.o
 mquic_client: CMakeFiles/mquic_client.dir/build.make
 mquic_client: libs/picoquic/libpicoquic-core.a
@@ -252,7 +428,7 @@ mquic_client: /usr/lib/aarch64-linux-gnu/libopencv_photo.so.4.6.0
 mquic_client: /usr/lib/aarch64-linux-gnu/libopencv_imgproc.so.4.6.0
 mquic_client: /usr/lib/aarch64-linux-gnu/libopencv_core.so.4.6.0
 mquic_client: CMakeFiles/mquic_client.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C executable mquic_client"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/takensoft/Desktop/mQUIC/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Linking C executable mquic_client"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mquic_client.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

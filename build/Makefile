@@ -733,29 +733,29 @@ check/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/picotls-build/CMakeFiles/check.dir/build.make _deps/picotls-build/CMakeFiles/check.dir/build
 .PHONY : check/fast
 
-client/frame_client.o: client/frame_client.c.o
-.PHONY : client/frame_client.o
+client/client_main.o: client/client_main.c.o
+.PHONY : client/client_main.o
 
 # target to build an object file
-client/frame_client.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/frame_client.c.o
-.PHONY : client/frame_client.c.o
+client/client_main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/client_main.c.o
+.PHONY : client/client_main.c.o
 
-client/frame_client.i: client/frame_client.c.i
-.PHONY : client/frame_client.i
+client/client_main.i: client/client_main.c.i
+.PHONY : client/client_main.i
 
 # target to preprocess a source file
-client/frame_client.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/frame_client.c.i
-.PHONY : client/frame_client.c.i
+client/client_main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/client_main.c.i
+.PHONY : client/client_main.c.i
 
-client/frame_client.s: client/frame_client.c.s
-.PHONY : client/frame_client.s
+client/client_main.s: client/client_main.c.s
+.PHONY : client/client_main.s
 
 # target to generate assembly for a file
-client/frame_client.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/frame_client.c.s
-.PHONY : client/frame_client.c.s
+client/client_main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/client_main.c.s
+.PHONY : client/client_main.c.s
 
 client/h3zero_client.o: client/h3zero_client.c.o
 .PHONY : client/h3zero_client.o
@@ -805,12 +805,85 @@ client/h3zero_qpack.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/h3zero_qpack.c.s
 .PHONY : client/h3zero_qpack.c.s
 
+client/tls_trust.o: client/tls_trust.c.o
+.PHONY : client/tls_trust.o
+
+# target to build an object file
+client/tls_trust.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/tls_trust.c.o
+.PHONY : client/tls_trust.c.o
+
+client/tls_trust.i: client/tls_trust.c.i
+.PHONY : client/tls_trust.i
+
+# target to preprocess a source file
+client/tls_trust.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/tls_trust.c.i
+.PHONY : client/tls_trust.c.i
+
+client/tls_trust.s: client/tls_trust.c.s
+.PHONY : client/tls_trust.s
+
+# target to generate assembly for a file
+client/tls_trust.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/tls_trust.c.s
+.PHONY : client/tls_trust.c.s
+
+client/wt_callback.o: client/wt_callback.c.o
+.PHONY : client/wt_callback.o
+
+# target to build an object file
+client/wt_callback.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_callback.c.o
+.PHONY : client/wt_callback.c.o
+
+client/wt_callback.i: client/wt_callback.c.i
+.PHONY : client/wt_callback.i
+
+# target to preprocess a source file
+client/wt_callback.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_callback.c.i
+.PHONY : client/wt_callback.c.i
+
+client/wt_callback.s: client/wt_callback.c.s
+.PHONY : client/wt_callback.s
+
+# target to generate assembly for a file
+client/wt_callback.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_callback.c.s
+.PHONY : client/wt_callback.c.s
+
+client/wt_client.o: client/wt_client.c.o
+.PHONY : client/wt_client.o
+
+# target to build an object file
+client/wt_client.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_client.c.o
+.PHONY : client/wt_client.c.o
+
+client/wt_client.i: client/wt_client.c.i
+.PHONY : client/wt_client.i
+
+# target to preprocess a source file
+client/wt_client.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_client.c.i
+.PHONY : client/wt_client.c.i
+
+client/wt_client.s: client/wt_client.c.s
+.PHONY : client/wt_client.s
+
+# target to generate assembly for a file
+client/wt_client.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/client/wt_client.c.s
+.PHONY : client/wt_client.c.s
+
 libs/picoquic/loglib/autoqlog.o: libs/picoquic/loglib/autoqlog.c.o
 .PHONY : libs/picoquic/loglib/autoqlog.o
 
 # target to build an object file
 libs/picoquic/loglib/autoqlog.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/autoqlog.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.o
 .PHONY : libs/picoquic/loglib/autoqlog.c.o
 
 libs/picoquic/loglib/autoqlog.i: libs/picoquic/loglib/autoqlog.c.i
@@ -819,6 +892,7 @@ libs/picoquic/loglib/autoqlog.i: libs/picoquic/loglib/autoqlog.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/autoqlog.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/autoqlog.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.i
 .PHONY : libs/picoquic/loglib/autoqlog.c.i
 
 libs/picoquic/loglib/autoqlog.s: libs/picoquic/loglib/autoqlog.c.s
@@ -827,6 +901,7 @@ libs/picoquic/loglib/autoqlog.s: libs/picoquic/loglib/autoqlog.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/autoqlog.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/autoqlog.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/autoqlog.c.s
 .PHONY : libs/picoquic/loglib/autoqlog.c.s
 
 libs/picoquic/loglib/cidset.o: libs/picoquic/loglib/cidset.c.o
@@ -835,6 +910,7 @@ libs/picoquic/loglib/cidset.o: libs/picoquic/loglib/cidset.c.o
 # target to build an object file
 libs/picoquic/loglib/cidset.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/cidset.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.o
 .PHONY : libs/picoquic/loglib/cidset.c.o
 
 libs/picoquic/loglib/cidset.i: libs/picoquic/loglib/cidset.c.i
@@ -843,6 +919,7 @@ libs/picoquic/loglib/cidset.i: libs/picoquic/loglib/cidset.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/cidset.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/cidset.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.i
 .PHONY : libs/picoquic/loglib/cidset.c.i
 
 libs/picoquic/loglib/cidset.s: libs/picoquic/loglib/cidset.c.s
@@ -851,6 +928,7 @@ libs/picoquic/loglib/cidset.s: libs/picoquic/loglib/cidset.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/cidset.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/cidset.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/cidset.c.s
 .PHONY : libs/picoquic/loglib/cidset.c.s
 
 libs/picoquic/loglib/csv.o: libs/picoquic/loglib/csv.c.o
@@ -859,6 +937,7 @@ libs/picoquic/loglib/csv.o: libs/picoquic/loglib/csv.c.o
 # target to build an object file
 libs/picoquic/loglib/csv.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/csv.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.o
 .PHONY : libs/picoquic/loglib/csv.c.o
 
 libs/picoquic/loglib/csv.i: libs/picoquic/loglib/csv.c.i
@@ -867,6 +946,7 @@ libs/picoquic/loglib/csv.i: libs/picoquic/loglib/csv.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/csv.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/csv.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.i
 .PHONY : libs/picoquic/loglib/csv.c.i
 
 libs/picoquic/loglib/csv.s: libs/picoquic/loglib/csv.c.s
@@ -875,6 +955,7 @@ libs/picoquic/loglib/csv.s: libs/picoquic/loglib/csv.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/csv.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/csv.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/csv.c.s
 .PHONY : libs/picoquic/loglib/csv.c.s
 
 libs/picoquic/loglib/logconvert.o: libs/picoquic/loglib/logconvert.c.o
@@ -883,6 +964,7 @@ libs/picoquic/loglib/logconvert.o: libs/picoquic/loglib/logconvert.c.o
 # target to build an object file
 libs/picoquic/loglib/logconvert.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logconvert.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.o
 .PHONY : libs/picoquic/loglib/logconvert.c.o
 
 libs/picoquic/loglib/logconvert.i: libs/picoquic/loglib/logconvert.c.i
@@ -891,6 +973,7 @@ libs/picoquic/loglib/logconvert.i: libs/picoquic/loglib/logconvert.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/logconvert.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logconvert.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.i
 .PHONY : libs/picoquic/loglib/logconvert.c.i
 
 libs/picoquic/loglib/logconvert.s: libs/picoquic/loglib/logconvert.c.s
@@ -899,6 +982,7 @@ libs/picoquic/loglib/logconvert.s: libs/picoquic/loglib/logconvert.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/logconvert.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logconvert.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logconvert.c.s
 .PHONY : libs/picoquic/loglib/logconvert.c.s
 
 libs/picoquic/loglib/logreader.o: libs/picoquic/loglib/logreader.c.o
@@ -907,6 +991,7 @@ libs/picoquic/loglib/logreader.o: libs/picoquic/loglib/logreader.c.o
 # target to build an object file
 libs/picoquic/loglib/logreader.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logreader.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.o
 .PHONY : libs/picoquic/loglib/logreader.c.o
 
 libs/picoquic/loglib/logreader.i: libs/picoquic/loglib/logreader.c.i
@@ -915,6 +1000,7 @@ libs/picoquic/loglib/logreader.i: libs/picoquic/loglib/logreader.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/logreader.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logreader.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.i
 .PHONY : libs/picoquic/loglib/logreader.c.i
 
 libs/picoquic/loglib/logreader.s: libs/picoquic/loglib/logreader.c.s
@@ -923,6 +1009,7 @@ libs/picoquic/loglib/logreader.s: libs/picoquic/loglib/logreader.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/logreader.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/logreader.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/logreader.c.s
 .PHONY : libs/picoquic/loglib/logreader.c.s
 
 libs/picoquic/loglib/memory_log.o: libs/picoquic/loglib/memory_log.c.o
@@ -931,6 +1018,7 @@ libs/picoquic/loglib/memory_log.o: libs/picoquic/loglib/memory_log.c.o
 # target to build an object file
 libs/picoquic/loglib/memory_log.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/memory_log.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.o
 .PHONY : libs/picoquic/loglib/memory_log.c.o
 
 libs/picoquic/loglib/memory_log.i: libs/picoquic/loglib/memory_log.c.i
@@ -939,6 +1027,7 @@ libs/picoquic/loglib/memory_log.i: libs/picoquic/loglib/memory_log.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/memory_log.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/memory_log.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.i
 .PHONY : libs/picoquic/loglib/memory_log.c.i
 
 libs/picoquic/loglib/memory_log.s: libs/picoquic/loglib/memory_log.c.s
@@ -947,6 +1036,7 @@ libs/picoquic/loglib/memory_log.s: libs/picoquic/loglib/memory_log.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/memory_log.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/memory_log.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/memory_log.c.s
 .PHONY : libs/picoquic/loglib/memory_log.c.s
 
 libs/picoquic/loglib/qlog.o: libs/picoquic/loglib/qlog.c.o
@@ -955,6 +1045,7 @@ libs/picoquic/loglib/qlog.o: libs/picoquic/loglib/qlog.c.o
 # target to build an object file
 libs/picoquic/loglib/qlog.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/qlog.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.o
 .PHONY : libs/picoquic/loglib/qlog.c.o
 
 libs/picoquic/loglib/qlog.i: libs/picoquic/loglib/qlog.c.i
@@ -963,6 +1054,7 @@ libs/picoquic/loglib/qlog.i: libs/picoquic/loglib/qlog.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/qlog.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/qlog.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.i
 .PHONY : libs/picoquic/loglib/qlog.c.i
 
 libs/picoquic/loglib/qlog.s: libs/picoquic/loglib/qlog.c.s
@@ -971,6 +1063,7 @@ libs/picoquic/loglib/qlog.s: libs/picoquic/loglib/qlog.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/qlog.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/qlog.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/qlog.c.s
 .PHONY : libs/picoquic/loglib/qlog.c.s
 
 libs/picoquic/loglib/svg.o: libs/picoquic/loglib/svg.c.o
@@ -979,6 +1072,7 @@ libs/picoquic/loglib/svg.o: libs/picoquic/loglib/svg.c.o
 # target to build an object file
 libs/picoquic/loglib/svg.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/svg.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.o
 .PHONY : libs/picoquic/loglib/svg.c.o
 
 libs/picoquic/loglib/svg.i: libs/picoquic/loglib/svg.c.i
@@ -987,6 +1081,7 @@ libs/picoquic/loglib/svg.i: libs/picoquic/loglib/svg.c.i
 # target to preprocess a source file
 libs/picoquic/loglib/svg.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/svg.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.i
 .PHONY : libs/picoquic/loglib/svg.c.i
 
 libs/picoquic/loglib/svg.s: libs/picoquic/loglib/svg.c.s
@@ -995,6 +1090,7 @@ libs/picoquic/loglib/svg.s: libs/picoquic/loglib/svg.c.s
 # target to generate assembly for a file
 libs/picoquic/loglib/svg.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_server.dir/build.make CMakeFiles/mquic_server.dir/libs/picoquic/loglib/svg.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mquic_client.dir/build.make CMakeFiles/mquic_client.dir/libs/picoquic/loglib/svg.c.s
 .PHONY : libs/picoquic/loglib/svg.c.s
 
 libs/picoquic/picohttp/h3zero_server.o: libs/picoquic/picohttp/h3zero_server.c.o
@@ -1326,15 +1422,24 @@ help:
 	@echo "... ptlsbench"
 	@echo "... test-minicrypto.t"
 	@echo "... test-openssl.t"
-	@echo "... client/frame_client.o"
-	@echo "... client/frame_client.i"
-	@echo "... client/frame_client.s"
+	@echo "... client/client_main.o"
+	@echo "... client/client_main.i"
+	@echo "... client/client_main.s"
 	@echo "... client/h3zero_client.o"
 	@echo "... client/h3zero_client.i"
 	@echo "... client/h3zero_client.s"
 	@echo "... client/h3zero_qpack.o"
 	@echo "... client/h3zero_qpack.i"
 	@echo "... client/h3zero_qpack.s"
+	@echo "... client/tls_trust.o"
+	@echo "... client/tls_trust.i"
+	@echo "... client/tls_trust.s"
+	@echo "... client/wt_callback.o"
+	@echo "... client/wt_callback.i"
+	@echo "... client/wt_callback.s"
+	@echo "... client/wt_client.o"
+	@echo "... client/wt_client.i"
+	@echo "... client/wt_client.s"
 	@echo "... libs/picoquic/loglib/autoqlog.o"
 	@echo "... libs/picoquic/loglib/autoqlog.i"
 	@echo "... libs/picoquic/loglib/autoqlog.s"

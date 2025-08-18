@@ -1,8 +1,16 @@
 #include "h3zero_client.h"
 #include "h3zero_qpack.h"    // ← QPACK encoder 선언
 #include "picoquic.h"
+#include "picoquic_internal.h"
 #include <stdio.h>
 #include <string.h>
+static inline int write_varint(uint8_t **p, uint8_t *end, uint64_t v) {
+    if (*p >= end) return -1;
+    size_t w = picoquic_varint_encode(*p, (size_t)(end - *p), v);
+    if (w == 0) return -1;  // no space
+    *p += w;
+    return 0;
+}
 
 int h3zero_client_create_connect_request(
     picoquic_cnx_t* cnx,
@@ -13,11 +21,11 @@ int h3zero_client_create_connect_request(
 {
     if (!cnx || !server_name || !path) return -1;
 
-    uint8_t buf[1024];
-    uint8_t* bytes     = buf;
-    uint8_t* bytes_max = buf + sizeof(buf);
+    /* QPACK 헤더 블록 생성 */
+    uint8_t hbuf[1024];
+    uint8_t* bytes     = hbuf;
+    uint8_t* bytes_max = hbuf + sizeof(hbuf);
 
-    /* QPACK 헤더 블록 작성 */
     bytes = h3zero_qpack_enc_header(bytes, bytes_max, ":method",    "CONNECT");
     if (bytes == NULL) return -1;
     bytes = h3zero_qpack_enc_header(bytes, bytes_max, ":protocol",  "webtransport");
@@ -29,22 +37,19 @@ int h3zero_client_create_connect_request(
     bytes = h3zero_qpack_enc_header(bytes, bytes_max, ":authority", server_name);
     if (bytes == NULL) return -1;
 
-    size_t header_len = bytes - buf;
-    if (header_len == 0 || header_len > 1024) return -1;
+    size_t header_len = (size_t)(bytes - hbuf);
+    if (header_len == 0 || header_len > sizeof(hbuf)) return -1;
 
-    /* HEADERS 프레임 생성 */
+    /* H3 HEADERS 프레임: type=0x01, length=header_len, payload=header_block */
     uint8_t frame[1050];
     uint8_t* fptr = frame;
-    /* 0x01 = HEADERS */
-    fptr += picoquic_varint_encode(0x01, fptr);
-    fptr += picoquic_varint_encode(header_len, fptr);
-    memcpy(fptr, buf, header_len);
+    uint8_t* fend = frame + sizeof(frame);
+
+    if (write_varint(&fptr, fend, 0x01) != 0) return -1;                    // type
+    if (write_varint(&fptr, fend, (uint64_t)header_len) != 0) return -1;    // length
+    if ((size_t)(fend - fptr) < header_len) return -1;                      // space check
+    memcpy(fptr, hbuf, header_len);
     fptr += header_len;
 
-    /* 스트림에 추가 */
-    int ret = picoquic_add_to_stream(cnx, stream_id,
-                                     frame,
-                                     (size_t)(fptr - frame),
-                                     fin ? 1 : 0);
-    return ret;
+    return picoquic_add_to_stream(cnx, stream_id, frame, (size_t)(fptr - frame), fin ? 1 : 0);
 }

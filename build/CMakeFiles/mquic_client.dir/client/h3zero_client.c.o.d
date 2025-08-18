@@ -63,7 +63,13 @@ CMakeFiles/mquic_client.dir/client/h3zero_client.c.o: \
  /usr/include/aarch64-linux-gnu/bits/getopt_posix.h \
  /usr/include/aarch64-linux-gnu/bits/getopt_core.h \
  /usr/include/aarch64-linux-gnu/bits/unistd_ext.h \
- /home/takensoft/Desktop/mQUIC/client/h3zero_qpack.h /usr/include/stdio.h \
+ /home/takensoft/Desktop/mQUIC/client/h3zero_qpack.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_internal.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picohash.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picosplay.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic.h \
+ /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picoquic_utils.h \
+ /usr/include/stdio.h \
  /usr/include/aarch64-linux-gnu/bits/types/__fpos_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__fpos64_t.h \
@@ -73,7 +79,7 @@ CMakeFiles/mquic_client.dir/client/h3zero_client.c.o: \
  /usr/include/aarch64-linux-gnu/bits/stdio_lim.h \
  /usr/include/aarch64-linux-gnu/bits/floatn.h \
  /usr/include/aarch64-linux-gnu/bits/floatn-common.h \
- /usr/include/string.h \
+ /usr/include/inttypes.h /usr/include/string.h \
  /usr/include/aarch64-linux-gnu/bits/types/locale_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/strings.h
