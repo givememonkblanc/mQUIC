@@ -1,2 +1,9 @@
 build/
 build/
+build/
+qlogs/
+binlog/
+*.qlog
+*.pcapng
+*.dSYM/
+.DS_Store

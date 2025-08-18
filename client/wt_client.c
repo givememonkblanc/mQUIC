@@ -1,4 +1,4 @@
-/* client/wt_client.c  —  cleaned & consolidated */
+// wt_client.c  — cleaned & consolidated (no duplicate public symbols)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,6 +14,7 @@
 
 /* ============================ Globals & Macros ============================ */
 
+/* Single definition here; elsewhere use `extern volatile sig_atomic_t g_running;` */
 volatile sig_atomic_t g_running = 1;   /* packet loop gate */
 
 #ifndef LOGV
@@ -27,7 +28,7 @@ volatile sig_atomic_t g_running = 1;   /* packet loop gate */
 
 /* ======================= Internal per-stream state ======================== */
 
-struct wt_stream_t {
+typedef struct wt_stream_t {
     uint64_t stream_id;
 
     uint8_t* buf;
@@ -40,15 +41,15 @@ struct wt_stream_t {
     int      use_len_framing; /* once detected, stick to length-framing */
 
     struct wt_stream_t* next;
-};
+} wt_stream_t;
 
 /* small helpers */
-static inline size_t payload_need(const struct wt_stream_t* st)
+static inline size_t payload_need(const wt_stream_t* st)
 {
     return (st->cur_len > st->pts_len) ? (size_t)(st->cur_len - st->pts_len) : 0u;
 }
 
-/* forward decls for local helpers */
+/* forward decl for local callback */
 static void on_jpeg_found_cb(const uint8_t* data, size_t len, void* user);
 
 /* ============================= Public helpers ============================ */
@@ -59,13 +60,13 @@ int ensure_dir(const char* path)
     return (errno == EEXIST) ? 0 : -1;
 }
 
-/* RFC 9000 varint (decode/encode) */
-size_t quic_varint_decode(const uint8_t* p, size_t len, uint64_t* out)
+/* RFC 9000 varint (decode/encode) kept local to avoid ODR/link clashes */
+static inline size_t wt_varint_decode(const uint8_t* p, size_t len, uint64_t* out)
 {
     if (len == 0) return 0;
     uint8_t b0 = p[0];
     switch (b0 & 0xC0) {
-    case 0x00: if (len < 1) return 0; *out = b0 & 0x3F; return 1;
+    case 0x00: if (len < 1) return 0; *out = (uint64_t)(b0 & 0x3F); return 1;
     case 0x40: if (len < 2) return 0; *out = ((uint64_t)(b0 & 0x3F) << 8) | p[1]; return 2;
     case 0x80:
         if (len < 4) return 0;
@@ -80,7 +81,7 @@ size_t quic_varint_decode(const uint8_t* p, size_t len, uint64_t* out)
     }
 }
 
-size_t quic_varint_encode(uint64_t v, uint8_t* out)
+static inline size_t wt_varint_encode(uint64_t v, uint8_t* out)
 {
     if (v < (1ull << 6)) {
         out[0] = (uint8_t)v; return 1;
@@ -129,10 +130,11 @@ int send_wt_control(picoquic_cnx_t* cnx, uint64_t session_id,
                     uint8_t code, const uint8_t* payload, size_t payload_len)
 {
     uint64_t sid = picoquic_get_next_local_stream_id(cnx, 1); /* client uni */
-    if ((sid & 0x3) != 0x2) return -1;   // ← 이렇게 수정
+    if ((sid & 0x3) != 0x2) return -1;   /* sanity: client-uni ends with 0b10 */
+
     uint8_t hdr[16]; size_t off = 0;
-    off += quic_varint_encode(0x54, hdr + off);
-    off += quic_varint_encode(session_id, hdr + off);
+    off += wt_varint_encode(0x54, hdr + off);
+    off += wt_varint_encode(session_id, hdr + off);
 
     if (picoquic_add_to_stream(cnx, sid, hdr, off, 0) != 0) return -1;
     if (picoquic_add_to_stream(cnx, sid, &code, 1, payload_len == 0 ? 1 : 0) != 0) return -1;
@@ -145,13 +147,13 @@ int send_wt_control(picoquic_cnx_t* cnx, uint64_t session_id,
 
 /* ======================= JPEG & file I/O small helpers ==================== */
 
-void save_frame(app_ctx_t* app, const uint8_t* data, size_t len)
+static void save_frame(app_ctx_t* app, const uint8_t* data, size_t len)
 {
     char path[1024];
     snprintf(path, sizeof(path), "%s/frame_%05d.jpg", app->out_dir, app->saved);
     FILE* f = fopen(path, "wb");
     if (!f) { fprintf(stderr, "[client] fopen(%s) failed: %s\n", path, strerror(errno)); return; }
-    fwrite(data, 1, len, f);
+    (void)fwrite(data, 1, len, f);
     fclose(f);
     fprintf(stdout, "[client] saved %s (%zu bytes)\n", path, len);
     app->saved++;
@@ -188,27 +190,27 @@ void extract_jpegs(uint8_t* buf, size_t* len_io,
 
 /* =========================== Stream list helpers ========================== */
 
-wt_stream_t* get_stream(app_ctx_t* app, uint64_t sid)
+static wt_stream_t* get_stream(app_ctx_t* app, uint64_t sid)
 {
-    for (wt_stream_t* p = app->streams; p; p = p->next)
+    for (wt_stream_t* p = (wt_stream_t*)app->streams; p; p = p->next)
         if (p->stream_id == sid) return p;
 
     wt_stream_t* p = (wt_stream_t*)calloc(1, sizeof(*p));
     if (!p) return NULL;
 
     p->stream_id = sid;
-    p->cap = 1 << 20;
+    p->cap = (size_t)1 << 20; /* 1 MiB initial */
     p->buf = (uint8_t*)malloc(p->cap);
     if (!p->buf) { free(p); return NULL; }
 
-    p->next = app->streams;
+    p->next = (wt_stream_t*)app->streams;
     app->streams = p;
     return p;
 }
 
 void free_streams(app_ctx_t* app)
 {
-    wt_stream_t* p = app->streams;
+    wt_stream_t* p = (wt_stream_t*)app->streams;
     while (p) { wt_stream_t* n = p->next; free(p->buf); free(p); p = n; }
     app->streams = NULL;
 }
@@ -226,10 +228,10 @@ int wt_handle_stream_data(app_ctx_t* app, uint64_t sid, uint8_t* bytes, size_t l
         /* A) one-time WT uni header: 0x54 + session_id */
         if (!st->header_ok) {
             uint64_t v = 0, sidv = 0;
-            size_t c_type = quic_varint_decode(bytes + off, length - off, &v);
+            size_t c_type = wt_varint_decode(bytes + off, length - off, &v);
             if (c_type == 0) break;
 
-            size_t c_sid  = quic_varint_decode(bytes + off + c_type, length - off - c_type, &sidv);
+            size_t c_sid  = wt_varint_decode(bytes + off + c_type, length - off - c_type, &sidv);
             if (c_sid == 0) break;
 
             off += c_type + c_sid;
@@ -251,16 +253,16 @@ int wt_handle_stream_data(app_ctx_t* app, uint64_t sid, uint8_t* bytes, size_t l
             continue;
         }
 
-        /* B) try to detect length-framing (first time only) */
+        /* B) detect length-framing (first time only) */
         if (!st->use_len_framing && st->cur_len == 0) {
             if (off >= length) break;
 
             /* ensure we have at least the varint for length */
-            size_t need_len = 1u << ((bytes[off] & 0xC0) >> 6);
+            size_t need_len = (size_t)1u << ((bytes[off] & 0xC0) >> 6);
             if (length - off < need_len) break;
 
             uint64_t fl = 0;
-            size_t c = quic_varint_decode(bytes + off, length - off, &fl);
+            size_t c = wt_varint_decode(bytes + off, length - off, &fl);
             if (c == 0) break;
 
             if (fl == 0 || fl > WT_MAX_FRAME_LEN) {
@@ -292,7 +294,7 @@ int wt_handle_stream_data(app_ctx_t* app, uint64_t sid, uint8_t* bytes, size_t l
 
             /* optional PTS */
             uint64_t dummy = 0;
-            size_t c2 = quic_varint_decode(bytes + off, length - off, &dummy);
+            size_t c2 = wt_varint_decode(bytes + off, length - off, &dummy);
             if (c2 > 0) { off += c2; st->pts_len = c2; }
 
             size_t need_payload = payload_need(st);
@@ -314,7 +316,7 @@ int wt_handle_stream_data(app_ctx_t* app, uint64_t sid, uint8_t* bytes, size_t l
             }
 
             size_t avail = length - off;
-            size_t take  = (need - st->got < avail) ? (need - st->got) : avail;
+            size_t take  = ((need - st->got) < avail) ? (need - st->got) : avail;
             if (take > 0) {
                 memcpy(st->buf + st->got, bytes + off, take);
                 st->got += take;
@@ -356,33 +358,9 @@ int wt_handle_stream_data(app_ctx_t* app, uint64_t sid, uint8_t* bytes, size_t l
     }
     return 0;
 }
-int h3zero_client_create_connect_request(picoquic_cnx_t* cnx,
-                                         uint64_t stream_id,
-                                         const char* authority,
-                                         const char* path,
-                                         int is_webtransport)
-{
-    /* 1) QPACK 헤더블록 만들기 (CONNECT + :protocol=webtransport + :authority + :path) */
-    uint8_t hb[1024];
-    uint8_t* p = h3zero_create_connect_header_frame(
-        hb, hb + sizeof(hb),
-        authority,
-        (const uint8_t*)path, strlen(path),
-        is_webtransport ? "webtransport" : NULL,  /* :protocol */
-        NULL,                                      /* origin(필요 없으면 NULL) */
-        H3ZERO_USER_AGENT_STRING                   /* UA */
-    );
-    if (p == NULL) return -1;
-    size_t hb_len = (size_t)(p - hb);
 
-    /* 2) HTTP/3 HEADERS 프레임 래핑 (type=0x01, 길이는 QUIC varint) */
-    uint8_t frame[16 + sizeof(hb)];
-    size_t off = 0;
-    off += quic_varint_encode(0x01, frame + off);     /* HEADERS */
-    off += quic_varint_encode(hb_len, frame + off);   /* length */
-    memcpy(frame + off, hb, hb_len);
-    off += hb_len;
-
-    /* 3) 스트림으로 전송 (FIN은 내지 않음) */
-    return picoquic_add_to_stream(cnx, stream_id, frame, off, 0);
-}
+/* NOTE: Do NOT provide `h3zero_client_create_connect_request` here.
+ * That symbol is defined in client/h3zero_client.c. Keeping it here
+ * causes duplicate symbol linker errors. If you need a local helper,
+ * name it differently and mark it `static` (e.g., `static int wt_send_connect_request(...)`).
+ */
