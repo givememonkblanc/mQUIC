@@ -6,9 +6,11 @@
 #include "picoquic.h"
 #include "picoquic_utils.h"
 #include "picoquic_packet_loop.h"
+#include "callback.h" // 새로 만든 헤더를 포함
 
 #include "h3zero.h"
 #include "h3zero_common.h"
+#include "h3zero_protocol.h"
 #include "pico_webtransport.h"
 
 #include "picotls.h" // ptls_iovec_t
@@ -396,11 +398,21 @@ static int camera_wt_callback(picoquic_cnx_t* cnx,
     streamer_context_t* ctx = (streamer_context_t*)callback_ctx;
 
     switch (ev) {
+    // <<< 연결이 완전히 닫히는 이벤트를 여기에 추가
+    case picoquic_callback_close:
+        fprintf(stderr, "[서버-로그] WebTransport 연결 종료됨. 스레드를 정리합니다.\n");
+        /* fallthrough */ // 바로 아래 case로 실행을 이어감
     case picoquic_callback_stop_sending:
     case picoquic_callback_stream_reset:
-        ctx->is_sending = 0;
-        pthread_join(ctx->camera_thread,  NULL);
-        pthread_join(ctx->network_thread, NULL);
+        if (ctx->is_sending) {
+            ctx->is_sending = 0;
+            // pthread_join은 스레드가 종료될 때까지 기다리는 함수이므로
+            // 콜백 함수 안에서 호출하면 데드락을 유발할 수 있습니다.
+            // 여기서는 플래그만 설정하고, 스레드 정리는 run_server의 메인 루프 종료 후
+            // 또는 별도의 관리 스레드에서 처리하는 것이 더 안전한 설계입니다.
+            // 우선은 is_sending 플래그를 통해 스레드들이 스스로 종료되도록 유도합니다.
+            fprintf(stderr, "[서버-로그] 전송 중단 플래그 설정 완료.\n");
+        }
         break;
     default:
         break;
@@ -408,32 +420,63 @@ static int camera_wt_callback(picoquic_cnx_t* cnx,
     return 0;
 }
 
+
 /* ============================ PATH HANDLER =========================== */
 static int camera_path_callback(picoquic_cnx_t* cnx,
     uint8_t* bytes, size_t length, picohttp_call_back_event_t event,
     struct st_h3zero_stream_ctx_t* stream_ctx, void* app_ctx)
 {
+    // 1. 함수 진입 로그
+    fprintf(stderr, "==> LOG: camera_path_callback 진입 (이벤트 타입: %d)\n", event);
+
     (void)bytes; (void)length;
     streamer_context_t* ctx = (streamer_context_t*)app_ctx;
 
     if (event == picohttp_callback_connect) {
+        // 2. CONNECT 이벤트 처리 시작 로그
+        fprintf(stderr, "    -> LOG: picohttp_callback_connect 이벤트 처리 시작...\n");
+
         ctx->cnx               = cnx;
         ctx->control_stream_id = stream_ctx->stream_id;
         ctx->h3ctx             = stream_ctx->path_callback_ctx;
         picoquic_enable_keep_alive(cnx, KEEPALIVE_INTERVAL_US);
         picoquic_set_callback(cnx, camera_wt_callback, app_ctx);
 
+        // ==================== 사용자 코드로 수정 ====================
+        // pico_webtransport.c에 직접 구현하신 함수를 호출하여 200 OK 응답을 전송합니다.
+        int ret = h3_send_status_200_headers(cnx, stream_ctx->stream_id);
+        if (ret != 0) {
+            fprintf(stderr, "    <-- FATAL: 200 OK 응답 전송 실패!\n");
+            log_write("FATAL: Failed to send 200 OK response.");
+            return -1;
+        }
+        fprintf(stderr, "    --> LOG: 200 OK 응답 전송 성공.\n");
+        // ==========================================================
+
         if (!ctx->is_sending) {
             ctx->frame_count = 0;
             ctx->is_sending  = 1;
+            
+            // 3. 스레드 생성 직전 로그
+            fprintf(stderr, "        --> LOG: 카메라/네트워크 스레드 생성을 시도합니다.\n");
+
             if (pthread_create(&ctx->camera_thread,  NULL, camera_thread_func,  ctx) != 0 ||
                 pthread_create(&ctx->network_thread, NULL, network_thread_func, ctx) != 0) {
+                
+                // 4. 스레드 생성 실패 로그
+                fprintf(stderr, "        <-- FATAL: pthread_create 실패!\n");
                 log_write("FATAL: pthread_create failed.");
                 ctx->is_sending = 0;
                 return -1;
             }
+            
+            // 5. 스레드 생성 성공 로그
+            fprintf(stderr, "        <-- LOG: 스레드 생성 성공.\n");
         }
     }
+
+    // 6. 함수 종료 로그
+    fprintf(stderr, "<== LOG: camera_path_callback 정상 종료\n");
     return 0;
 }
 
@@ -486,7 +529,7 @@ int run_server(void)
     picoquic_quic_t* quic = picoquic_create(
         16, "cert.pem", "key.pem", NULL, "h3",
         h3zero_callback, &server_param, NULL, NULL, NULL,
-        picoquic_current_time(), NULL, NULL, NULL, 0
+        picoquic_current_time(), NULL, NULL, NULL, 1
     );
     if (!quic) {
         fprintf(stderr, "[서버-오류] picoquic_create() 실패. 현재 폴더에 cert.pem, key.pem 파일이 있는지 확인하세요.\n");
@@ -503,6 +546,7 @@ int run_server(void)
     tp.is_multipath_enabled = 1;
     tp.initial_max_path_id  = 3;
     tp.enable_time_stamp    = 3;
+    tp.max_datagram_frame_size = 1280; // <<< 이 한 줄을 추가하세요!
     picoquic_set_default_tp(quic, &tp);
     fprintf(stderr, "[서버-로그] 4. 멀티패스 전송 파라미터 설정 완료.\n");
 
@@ -516,7 +560,9 @@ int run_server(void)
 
     /* 패킷 루프 */
     fprintf(stderr, "[서버-로그] 6. UDP 포트 4433에서 패킷 루프를 시작합니다. 클라이언트 접속 대기 중...\n");
-    int ret = picoquic_packet_loop(quic, 4433, 0, 0, 0, 0, NULL, NULL);
+    picoquic_packet_loop_param_t param = { 0 };
+    param.local_port = 4433; 
+    int ret = picoquic_packet_loop_v2(quic, &param, NULL, NULL);
     fprintf(stderr, "[서버-로그] 7. 패킷 루프가 종료되었습니다 (반환 코드: %d).\n", ret);
 
     /* 정리 */

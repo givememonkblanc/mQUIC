@@ -20,6 +20,7 @@ extern "C" {
 
 /* Set required transport parameters for web transport  */
 void picowt_set_transport_parameters(picoquic_cnx_t* cnx);
+int h3_send_status_200_headers(picoquic_cnx_t* cnx, uint64_t stream_id);
 
 /* Create the control stream for the Web Transport session on the client. */
 h3zero_stream_ctx_t* picowt_set_control_stream(picoquic_cnx_t* cnx, h3zero_callback_ctx_t* h3_ctx);

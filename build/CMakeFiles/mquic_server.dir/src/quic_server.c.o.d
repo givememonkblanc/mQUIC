@@ -105,9 +105,11 @@ CMakeFiles/mquic_server.dir/src/quic_server.c.o: \
  /usr/include/aarch64-linux-gnu/bits/types/sigevent_t.h \
  /usr/include/aarch64-linux-gnu/bits/types/__sigval_t.h \
  /usr/include/aarch64-linux-gnu/bits/netdb.h /usr/include/netinet/udp.h \
+ /home/takensoft/Desktop/mQUIC/include/callback.h \
  /home/takensoft/Desktop/mQUIC/src/h3zero.h \
  /home/takensoft/Desktop/mQUIC/src/h3zero_common.h \
  /home/takensoft/Desktop/mQUIC/libs/picoquic/picoquic/picosplay.h \
+ /home/takensoft/Desktop/mQUIC/src/h3zero_protocol.h \
  /home/takensoft/Desktop/mQUIC/src/pico_webtransport.h \
  /home/takensoft/Desktop/mQUIC/build/_deps/picotls-src/include/picotls.h \
  /usr/include/assert.h /home/takensoft/Desktop/mQUIC/include/path_algo.h \

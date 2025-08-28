@@ -104,7 +104,7 @@ static size_t qpack_min_status_200(uint8_t* out, size_t cap)
 
     return (size_t)(p - out);
 }
-static int h3_send_status_200_headers(picoquic_cnx_t* cnx, uint64_t stream_id)
+int h3_send_status_200_headers(picoquic_cnx_t* cnx, uint64_t stream_id)
 {
     uint8_t block[256];
     size_t blen = qpack_min_status_200(block, sizeof(block));
@@ -208,6 +208,7 @@ int picowt_receive_capsule(picoquic_cnx_t* cnx, h3zero_stream_ctx_t* stream_ctx,
             (unsigned long long)t, (unsigned long long)l);
     return 0;
 }
+
 
 void picowt_release_capsule(picowt_capsule_t* capsule)
 {

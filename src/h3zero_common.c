@@ -288,55 +288,79 @@ uint64_t h3zero_parse_stream_prefix(uint8_t* buffer_8, size_t* nb_in_buffer, uin
 
 int h3zero_protocol_init(picoquic_cnx_t* cnx)
 {
-	uint8_t decoder_stream_head = (uint8_t)h3zero_stream_type_qpack_decoder;
-	uint8_t encoder_stream_head = (uint8_t)h3zero_stream_type_qpack_encoder;
-	uint64_t settings_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
-	/* Some of the setting values depend on the presence of connection parameters */
-	uint8_t settings_buffer[256];
-	uint8_t* settings_last = 0;
-	h3zero_settings_t settings = { 0 };
-	int ret = 0;
+    // <<< 1. 함수 진입 로그
+    fprintf(stderr, "[H3_INIT] h3zero_protocol_init 함수 시작...\n");
 
-	settings.enable_connect_protocol = 1;
+    uint8_t decoder_stream_head = (uint8_t)h3zero_stream_type_qpack_decoder;
+    uint8_t encoder_stream_head = (uint8_t)h3zero_stream_type_qpack_encoder;
+    uint64_t settings_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
+    uint8_t settings_buffer[256];
+    uint8_t* settings_last = 0;
+    h3zero_settings_t settings = { 0 };
+    int ret = 0;
 
-	/* Web transport is only enabled if h3 datagrams are supported.
-	 */
-	if (cnx->local_parameters.max_datagram_frame_size > 0) {
-		settings.h3_datagram = 1;
-		settings.webtransport_max_sessions = 1;
-	}
+    settings.enable_connect_protocol = 1;
 
-	settings_buffer[0] = (uint8_t)h3zero_stream_type_control;
-	if ((settings_last = h3zero_settings_encode(settings_buffer + 1, settings_buffer + sizeof(settings_buffer), &settings)) == NULL) {
-		ret = H3ZERO_INTERNAL_ERROR;
-	}
-	else {
-		ret = picoquic_add_to_stream(cnx, settings_stream_id, settings_buffer, settings_last - settings_buffer, 0);
-	}
+    if (cnx->local_parameters.max_datagram_frame_size > 0) {
+        fprintf(stderr, ">>> [H3_INIT] 데이터그램 활성화됨! WebTransport 켭니다. (size=%lu)\n", 
+            (unsigned long)cnx->local_parameters.max_datagram_frame_size);
+        settings.h3_datagram = 1;
+        settings.webtransport_max_sessions = 1;
+    } else {
+        fprintf(stderr, ">>> [H3_INIT] 데이터그램 비활성화됨! WebTransport를 끕니다. (size=0)\n");
+    }
 
-	if (ret == 0) {
-		/* set the settings stream the first stream to write! */
-		ret = picoquic_set_stream_priority(cnx, settings_stream_id, 0);
-	}
+    settings_buffer[0] = (uint8_t)h3zero_stream_type_control;
+    settings_last = h3zero_settings_encode(settings_buffer + 1, settings_buffer + sizeof(settings_buffer), &settings);
 
-	if (ret == 0) {
-		uint64_t encoder_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
-		/* set the encoder stream, although we do not actually create dynamic codes. */
-		ret = picoquic_add_to_stream(cnx, encoder_stream_id, &encoder_stream_head, 1, 0);
-		if (ret == 0) {
-			ret = picoquic_set_stream_priority(cnx, encoder_stream_id, 1);
-		}
-	}
+    if (settings_last == NULL) {
+        // <<< 2. 세팅 인코딩 실패 로그
+        fprintf(stderr, "[H3_INIT] ERROR: H3 세팅 인코딩 실패! (버퍼가 작을 수 있음)\n");
+        ret = H3ZERO_INTERNAL_ERROR;
+    } else {
+        // <<< 3. 컨트롤 스트림 생성 시도 로그
+        fprintf(stderr, "[H3_INIT] CONTROL 스트림(ID: %llu) 생성을 시도합니다...\n", (unsigned long long)settings_stream_id);
+        ret = picoquic_add_to_stream(cnx, settings_stream_id, settings_buffer, settings_last - settings_buffer, 0);
+        if (ret != 0) {
+            fprintf(stderr, "[H3_INIT] ERROR: CONTROL 스트림 생성 실패! (ret=%d)\n", ret);
+        }
+    }
 
-	if (ret == 0) {
-		uint64_t decoder_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
-		/* set the the decoder stream, although we do not actually create dynamic codes. */
-		ret = picoquic_add_to_stream(cnx, decoder_stream_id, &decoder_stream_head, 1, 0);
-		if (ret == 0) {
-			ret = picoquic_set_stream_priority(cnx, decoder_stream_id, 1);
-		}
-	}
-	return ret;
+    if (ret == 0) {
+        ret = picoquic_set_stream_priority(cnx, settings_stream_id, 0);
+    }
+
+    if (ret == 0) {
+        uint64_t encoder_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
+        // <<< 4. 인코더 스트림 생성 시도 로그
+        fprintf(stderr, "[H3_INIT] ENCODER 스트림(ID: %llu) 생성을 시도합니다...\n", (unsigned long long)encoder_stream_id);
+        ret = picoquic_add_to_stream(cnx, encoder_stream_id, &encoder_stream_head, 1, 0);
+        if (ret == 0) {
+            ret = picoquic_set_stream_priority(cnx, encoder_stream_id, 1);
+        } else {
+            fprintf(stderr, "[H3_INIT] ERROR: ENCODER 스트림 생성 실패! (ret=%d)\n", ret);
+        }
+    }
+
+    if (ret == 0) {
+        uint64_t decoder_stream_id = picoquic_get_next_local_stream_id(cnx, 1);
+        // <<< 5. 디코더 스트림 생성 시도 로그
+        fprintf(stderr, "[H3_INIT] DECODER 스트림(ID: %llu) 생성을 시도합니다...\n", (unsigned long long)decoder_stream_id);
+        ret = picoquic_add_to_stream(cnx, decoder_stream_id, &decoder_stream_head, 1, 0);
+        if (ret == 0) {
+            ret = picoquic_set_stream_priority(cnx, decoder_stream_id, 1);
+        } else {
+            fprintf(stderr, "[H3_INIT] ERROR: DECODER 스트림 생성 실패! (ret=%d)\n", ret);
+        }
+    }
+
+    // <<< 6. 함수 종료 및 결과 로그
+    if (ret == 0) {
+        fprintf(stderr, "[H3_INIT] H3 프로토콜 초기화 완료 (성공).\n");
+    } else {
+        fprintf(stderr, "[H3_INIT] H3 프로토콜 초기화 중 에러 발생 (ret=%d).\n", ret);
+    }
+    return ret;
 }
 
 uint8_t* h3zero_load_frame_content(uint8_t* bytes, uint8_t* bytes_max,

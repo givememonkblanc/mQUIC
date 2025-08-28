@@ -12,5 +12,7 @@ int h3zero_client_create_connect_request(
     const char*     server_name,
     const char*     path,
     int             fin);
+int h3zero_create_headers_frame(picoquic_cnx_t* cnx, uint64_t stream_id, const uint8_t* headers, size_t headers_len, int fin);
 
 #endif // H3ZERO_CLIENT_H
+

@@ -53,3 +53,28 @@ int h3zero_client_create_connect_request(
 
     return picoquic_add_to_stream(cnx, stream_id, frame, (size_t)(fptr - frame), fin ? 1 : 0);
 }
+
+int h3zero_create_headers_frame(
+    picoquic_cnx_t* cnx,
+    uint64_t stream_id,
+    const uint8_t* headers,
+    size_t headers_len,
+    int fin)
+{
+    if (!cnx || !headers || headers_len == 0) return -1;
+
+    uint8_t frame[1200];
+    uint8_t* fptr = frame;
+    uint8_t* fend = frame + sizeof(frame);
+
+    // frame type = 0x01 (HEADERS)
+    if (write_varint(&fptr, fend, 0x01) != 0) return -1;
+    // length
+    if (write_varint(&fptr, fend, headers_len) != 0) return -1;
+    // copy payload
+    if ((size_t)(fend - fptr) < headers_len) return -1;
+    memcpy(fptr, headers, headers_len);
+    fptr += headers_len;
+
+    return picoquic_add_to_stream(cnx, stream_id, frame, (size_t)(fptr - frame), fin ? 1 : 0);
+}

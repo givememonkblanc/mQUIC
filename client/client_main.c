@@ -1,100 +1,330 @@
-
+#include "autoqlog.h"
+#include "picoquic_binlog.h"
+#include "picoquic.h"
+#include "picoquic_packet_loop.h"
+#include "picoquic_utils.h"
+#include "qlog.h"
+#include "h3zero.h"
+#include "h3zero_protocol.h" 
+#include "picotls.h"
+#include "h3zero_client.h" // ✅ [수정] picohttp_header_t 및 관련 함수를 위해 추가
+#include <getopt.h>
+#include <errno.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
-#include <inttypes.h>
 #include <string.h>
-#include <errno.h>
-#include <signal.h>      // sig_atomic_t
-#include <sys/stat.h>    // mkdir
-#include <sys/types.h>
-#include <netinet/in.h>  // AF_INET
-#include <getopt.h>      // getopt_long
+#include <sys/stat.h>
+#include <unistd.h>
+#include <inttypes.h> // PRIu64 매크로
 
-#include "picotls.h"             // ptls_iovec_t
-#include "picoquic.h"
-#include "picoquic_utils.h"
-#include "picoquic_packet_loop.h"
-#include "picoquic_binlog.h"
-#include "qlog.h"
-#include "autoqlog.h"
-
-#include "h3zero.h"
-#include "h3zero_common.h"
-#include "h3zero_client.h"       // h3zero_client_create_connect_request
-#include "wt_client.h"           // app_ctx_t, client_cb, free_streams, cli_opts_t, loop_hook, ensure_dir
-#include "logger.h"
-
-/* ────────────────────── Build banner ────────────────────── */
-#define BUILD_BANNER "[mquic_client] build " __DATE__ " " __TIME__
-
-/* ────────────────────── Signal ────────────────────── */
-static void handle_sigint(int sig) { (void)sig; g_running = 0; fprintf(stderr, "\n[client] SIGINT → graceful shutdown...\n"); }
-
-/* ────────────────────── CLI ────────────────────── */
-static void usage(const char* argv0) {
+/* ────────────────────── 타입 및 전역 변수 정의 ────────────────────── */
+static void print_usage(const char* app)
+{
     fprintf(stderr,
-        "Usage: %s --host <name|ip> --port <4433> --path </camera> [options]\n"
-        "Options:\n"
-        "  --alpn <h3|hq>       ALPN (default: h3)\n"
-        "  --addr <ip-or-host>  Connect addr (override DNS); default: --host\n"
-        "  --sni  <name>        TLS SNI (override); default: --host\n"
-        "  --out  <dir>         Output dir (default: ./frames)\n"
-        "  --frames <N>         Stop after N frames (0 = unlimited)\n"
-        "  --no-verify          Disable TLS cert verification (DEV ONLY)\n"
-        "  -h, --help           Show this help\n",
-        argv0);
+        "Usage: %s [OPTIONS]\n"
+        "  --host <name>           SNI/Host (예: example.com 또는 127.0.0.1)\n"
+        "  --addr <ip/host>        연결할 실제 주소(미지정 시 --host 사용)\n"
+        "  --port <num>            UDP 포트 (기본: 4433)\n"
+        "  --path <path>           WebTransport 엔드포인트 (기본: /)\n"
+        "  --alpn <proto>          ALPN (기본: h3)\n"
+        "  --sni <name>            SNI 별도 지정(기본: --host)\n"
+        "  --no-verify             인증서 검증 생략(개발/테스트용)\n"
+        "  --out <dir>             프레임 저장 디렉토리 (기본: frames)\n"
+        "  --max-frames <N>        수신 후 N프레임에서 종료 (기본: 0=무제한)\n"
+        "\n예:\n"
+        "  %s --host 127.0.0.1 --port 4433 --path /camera\n",
+        app, app);
 }
+// 커맨드 라인 옵션을 저장하는 구조체
+typedef struct {
+    const char* host;
+    const char* addr;
+    int port;
+    const char* path;
+    const char* alpn;
+    const char* sni;
+    int no_verify;
+    const char* out_dir;
+    int max_frames;
+} cli_opts_t;
 
-static int parse_cli(int argc, char** argv, cli_opts_t* o) {
-    memset(o, 0, sizeof(*o));
-    o->alpn = "h3";
-    o->out_dir = "./frames";
-    o->max_frames = 0;
+// 애플리케이션의 상태를 관리하는 컨텍스트 구조체
+typedef struct {
+    int max_frames;
+    int frame_count;
+    char out_dir[256];
 
-    static struct option long_opts[] = {
-        {"host",      required_argument, 0,  1 },
-        {"port",      required_argument, 0,  2 },
-        {"path",      required_argument, 0,  3 },
-        {"alpn",      required_argument, 0,  4 },
-        {"addr",      required_argument, 0,  5 },
-        {"sni",       required_argument, 0,  6 },
-        {"out",       required_argument, 0,  7 },
-        {"frames",    required_argument, 0,  8 },
-        {"no-verify", no_argument,       0,  9 },
-        {"help",      no_argument,       0, 'h'},
-        {0,0,0,0}
-    };
+    // 스트림 상태를 저장하기 위한 변수들
+    uint8_t* frame_buffer;
+    size_t   buffer_size;
+    uint64_t frame_size;
+    size_t   received_size;
+} app_ctx_t;
+static volatile int exit_flag = 0; 
 
-    int optidx = 0;
-    for (;;) {
-        int c = getopt_long(argc, argv, "h", long_opts, &optidx);
-        if (c == -1) break;
-        switch (c) {
-        case 1: o->host = optarg; break;
-        case 2: o->port = atoi(optarg); break;
-        case 3: o->path = optarg; break;
-        case 4: o->alpn = optarg; break;
-        case 5: o->addr = optarg; break;
-        case 6: o->sni  = optarg; break;
-        case 7: o->out_dir = optarg; break;
-        case 8: o->max_frames = atoi(optarg); break;
-        case 9: o->no_verify = 1; break;
-        case 'h': usage(argv[0]); return 1;
-        default: usage(argv[0]); return 1;
+// 클라이언트 옵션을 저장하기 위한 구조체
+typedef struct {
+    const char* server_name;
+    int server_port;
+    const char* path;
+} client_options_t;
+
+// 전역 종료 플래그
+extern volatile sig_atomic_t g_running;
+
+// main 함수보다 먼저 사용될 함수들의 프로토타입 선언
+static int parse_cli(int argc, char** argv, cli_opts_t* opt);
+static int ensure_dir(const char* dir);
+static void handle_sigint(int signum);
+static const char* picoquic_state_str_(picoquic_state_enum state);
+
+/* ────────────────────── 클라이언트 콜백 함수 ────────────────────── */
+
+static int client_cb(picoquic_cnx_t* cnx,
+    uint64_t stream_id, uint8_t* bytes, size_t length,
+    picoquic_call_back_event_t event, void* callback_ctx, void* v_stream_ctx)
+{
+    app_ctx_t* app = (app_ctx_t*)callback_ctx;
+
+    if (event == picoquic_callback_stream_data) {
+        uint8_t* p = bytes;
+        uint8_t* p_max = p + length;
+
+        while (p < p_max) {
+            if (app->frame_size == 0) {
+                size_t len_len = picoquic_varint_decode(p, (size_t)(p_max - p), &app->frame_size);
+                if (len_len == 0) {
+                    break;
+                }
+                p += len_len;
+
+                if (app->frame_size > app->buffer_size) {
+                    if (app->frame_buffer) free(app->frame_buffer);
+                    app->frame_buffer = (uint8_t*)malloc(app->frame_size);
+                    app->buffer_size = (app->frame_buffer) ? app->frame_size : 0;
+                }
+                app->received_size = 0;
+                fprintf(stderr, "새 프레임 수신 시작 (스트림 #%" PRIu64 ", 크기: %" PRIu64 " 바이트)\n", stream_id, app->frame_size);
+            }
+
+            if (app->frame_size > 0 && app->frame_buffer) {
+                size_t to_copy = (size_t)(p_max - p);
+                if (app->received_size + to_copy > app->frame_size) {
+                    to_copy = (size_t)app->frame_size - app->received_size;
+                }
+
+                memcpy(app->frame_buffer + app->received_size, p, to_copy);
+                app->received_size += to_copy;
+                p += to_copy;
+
+                if (app->received_size == app->frame_size) {
+                    app->frame_count++;
+                    fprintf(stderr, "프레임 #%d 수신 완료! (%zu 바이트)\n", app->frame_count, (size_t)app->frame_size);
+
+                    if (app->out_dir[0] != '\0') {
+                        char file_path[512];
+                        snprintf(file_path, sizeof(file_path), "%s/frame_%04d.jpg", app->out_dir, app->frame_count);
+                        FILE* f = fopen(file_path, "wb");
+                        if (f) {
+                            fwrite(app->frame_buffer, 1, app->frame_size, f);
+                            fclose(f);
+                        }
+                    }
+
+                    app->frame_size = 0;
+                    app->received_size = 0;
+
+                    if (app->max_frames > 0 && app->frame_count >= app->max_frames) {
+                        fprintf(stdout, "최대 프레임 수(%d)에 도달하여 연결을 종료합니다.\n", app->max_frames);
+                        picoquic_close(cnx, 0);
+                        g_running = 0;
+                    }
+                }
+            }
         }
+    } else if (event == picoquic_callback_stream_fin) {
+        fprintf(stderr, "스트림 #%" PRIu64 " FIN 수신.\n", stream_id);
+    } else if (event == picoquic_callback_close || event == picoquic_callback_application_close) {
+        fprintf(stderr, "연결이 종료되었습니다.\n");
+        if (app->frame_buffer) {
+            free(app->frame_buffer);
+            app->frame_buffer = NULL;
+        }
+        g_running = 0;
     }
-
-    /* fallback: 옛 포지셔널 형식 지원 (server port [path]) */
-    if (!o->host && optind < argc) o->host = argv[optind++];
-    if (!o->port && optind < argc) o->port = atoi(argv[optind++]);
-    if (!o->path && optind < argc) o->path = argv[optind++];
-
-    if (!o->host || !o->port || !o->path) { usage(argv[0]); return 1; }
     return 0;
 }
 
-/* ────────────────────── State string (편의) ────────────────────── */
+/* ────────────────────── Main 함수 ────────────────────── */
+
+int main(int argc, char** argv) {
+    fprintf(stderr, "[mquic_client] build: %s %s\n", __DATE__, __TIME__);
+
+    cli_opts_t opt;
+    if (parse_cli(argc, argv, &opt) != 0) return 1;
+
+    fprintf(stderr, "[로그] 1. 클라이언트 시작 (host=%s, port=%d, path=%s, alpn=%s)\n",
+            opt.host, opt.port, opt.path, opt.alpn ? opt.alpn : "(null)");
+
+    (void)ensure_dir(opt.out_dir);
+    (void)ensure_dir("binlog");
+    (void)ensure_dir("qlogs");
+
+    signal(SIGINT, handle_sigint);
+
+    picoquic_quic_t* quic = picoquic_create(
+        1, NULL, NULL, NULL, opt.alpn, NULL, NULL,
+        NULL, NULL, NULL, picoquic_current_time(), NULL, NULL, NULL, 0);
+    if (!quic) { fprintf(stderr, "[client] picoquic_create() failed\n"); return 1; }
+
+    picoquic_set_binlog(quic, "binlog");
+    picoquic_set_qlog(quic,  "qlogs");
+    picoquic_use_unique_log_names(quic, 1);
+    picoquic_set_key_log_file_from_env(quic);
+    {
+        picoquic_tp_t ctp = {0};
+        ctp.initial_max_data                      = 64ull * 1024 * 1024;
+        ctp.initial_max_stream_data_bidi_local    = 8ull * 1024 * 1024;
+        ctp.initial_max_stream_data_bidi_remote   = 8ull * 1024 * 1024;
+        ctp.initial_max_stream_data_uni           = 8ull * 1024 * 1024;
+        ctp.initial_max_stream_id_bidir           = 16;
+        ctp.initial_max_stream_id_unidir          = 1024;
+
+        /* 필수/권장 추가 */
+        ctp.max_packet_size            = 1500;  // (>= 1200)
+        ctp.ack_delay_exponent         = 3;
+        ctp.max_ack_delay              = 25;    // ms
+        ctp.active_connection_id_limit = 8;     // ★ 여기 핵심
+    }
+    if (opt.no_verify) {
+        picoquic_set_verify_certificate_callback(quic, NULL, NULL);
+    }
+
+    struct sockaddr_storage peer; int is_name = 0;
+    fprintf(stderr, "[로그] 2. 서버 주소 확인 중...\n");
+    const char* connect_host = opt.addr ? opt.addr : opt.host;
+    const char* sni_host     = opt.sni  ? opt.sni  : opt.host;
+    if (picoquic_get_server_address(connect_host, opt.port, &peer, &is_name) != 0) {
+        fprintf(stderr, "[client] resolve failed: %s:%d\n", opt.host, opt.port);
+        picoquic_free(quic); return 1;
+    }
+    fprintf(stderr, "[로그] 2. 서버 주소 확인 완료.\n");
+
+    fprintf(stderr, "[로그] 3. QUIC 연결 객체 생성 중...\n");
+    picoquic_cnx_t* cnx = picoquic_create_cnx(
+        quic, picoquic_null_connection_id, picoquic_null_connection_id,
+        (struct sockaddr*)&peer, picoquic_current_time(),
+        0, sni_host, opt.alpn, 1);
+    if (!cnx) { fprintf(stderr, "[client] create_cnx failed\n"); picoquic_free(quic); return 1; }
+
+    app_ctx_t app = {0};
+    app.max_frames = opt.max_frames;
+    strncpy(app.out_dir, opt.out_dir, sizeof(app.out_dir) - 1);
+    picoquic_set_callback(cnx, client_cb, &app);
+    fprintf(stderr, "[로그] 3. QUIC 연결 객체 생성 완료.\n");
+
+    fprintf(stderr, "[로그] 4. QUIC 연결 시작 (핸드셰이크 시작)...\n");
+    if (picoquic_start_client_cnx(cnx) != 0) {
+        fprintf(stderr, "[client] start_client_cnx failed\n");
+        goto cleanup;
+    }
+
+    fprintf(stderr, "[로그] 5. 핸드셰이크가 완료되기를 기다립니다...\n");
+    picoquic_state_enum state = picoquic_get_cnx_state(cnx);
+    uint64_t wait_start_time = picoquic_current_time();
+    while (state < picoquic_state_client_ready_start &&
+           state != picoquic_state_disconnecting &&
+           state != picoquic_state_disconnected &&
+           picoquic_current_time() - wait_start_time < 10000000)
+    {
+        picoquic_packet_loop_param_t lp_wait = {0};
+        picoquic_packet_loop_v2(quic, &lp_wait, NULL, NULL);
+        state = picoquic_get_cnx_state(cnx);
+    }
+
+    fprintf(stderr, "[로그] 6. 핸드셰이크 후 연결 상태: %s\n", picoquic_state_str_(state));
+    if (state < picoquic_state_client_ready_start) {
+        fprintf(stderr, "[에러] ready 상태가 아님 → CONNECT 미전송.\n");
+        goto cleanup;
+    }
+
+    /* ============================ WebTransport CONNECT 요청 섹션 ============================ */
+    {
+        fprintf(stderr, "[로그] 7. WebTransport CONNECT 요청 생성 및 전송 시도...\n");
+        char authority[256];
+        snprintf(authority, sizeof(authority), "%s:%d", sni_host, opt.port);
+
+        /* 요청용(클라이언트-초기화) bidirectional stream id */
+        uint64_t ctrl_id = picoquic_get_next_local_stream_id(cnx, 0);
+
+        /* 임시 헤더 블록(문자열). 실제로는 QPACK 인코딩 권장 */
+        uint8_t hdr_block[512];
+        int hdr_len = snprintf((char*)hdr_block, sizeof(hdr_block),
+            ":method: CONNECT\r\n"
+            ":scheme: https\r\n"
+            ":authority: %s\r\n"
+            ":path: %s\r\n"
+            ":protocol: webtransport\r\n",
+            authority, opt.path);
+
+        if (hdr_len <= 0 || (size_t)hdr_len >= sizeof(hdr_block)) {
+            fprintf(stderr, "[client] header block build failed/too long\n");
+            goto cleanup;
+        }
+
+        /* ✅ 프로젝트 헤더의 시그니처에 정확히 맞춰 호출 */
+        int ret = h3zero_create_headers_frame(
+            cnx,               /* picoquic_cnx_t* */
+            ctrl_id,           /* stream id */
+            hdr_block,         /* const uint8_t* headers */
+            (size_t)hdr_len,   /* size_t headers_len */
+            0                  /* fin=0 */
+        );
+        if (ret != 0) {
+            fprintf(stderr, "[client] CONNECT request failed to be sent (ret=%d)\n", ret);
+            goto cleanup;
+        }
+
+        fprintf(stdout, "[client] CONNECT sent (ctrl stream=%" PRIu64 ")\n", ctrl_id);
+    }
+    /* ====================================================================================== */
+
+    fprintf(stderr, "[로그] 8. 메인 데이터 패킷 루프 진입 (서버 응답 대기 중)...\n");
+    while (g_running && picoquic_get_cnx_state(cnx) < picoquic_state_disconnecting) {
+        picoquic_packet_loop_param_t lp = {0};
+        int ret = picoquic_packet_loop_v2(quic, &lp, NULL, NULL);
+        if (ret != 0) {
+            fprintf(stderr, "[client] packet loop failed with ret=%d\n", ret);
+            break;
+        }
+    }
+    fprintf(stderr, "[로그] 8. 메인 데이터 패킷 루프 종료.\n");
+
+cleanup:
+    fprintf(stdout, "[client] cleaning up...\n");
+    if (app.frame_buffer) {
+        free(app.frame_buffer);
+    }
+    picoquic_free(quic);
+    return 0;
+}
+
+/* ────────────────────── 유틸리티 함수 및 전역 변수 ────────────────────── */
+
+// Ctrl+C 입력을 처리하기 위한 전역 플래그
+
+
+
+static void handle_sigint(int signum)
+{
+    // 컴파일러가 최적화로 exit_flag 검사를 생략하지 않도록 volatile로 선언
+    exit_flag = 1;
+}
+
+/**
+ * @brief picoquic 연결 상태 enum을 문자열로 변환 (디버깅용)
+ */
 static const char* picoquic_state_str_(picoquic_state_enum state)
 {
     switch (state) {
@@ -115,243 +345,101 @@ static const char* picoquic_state_str_(picoquic_state_enum state)
     }
 }
 
-/* trust-all (DEV ONLY, 외부 구현이 있으면 링크됨) */
-extern ptls_verify_certificate_t PTLS_TRUST_ALL;
+/**
+ * @brief 사용법을 출력하는 함수
+ */
 
-/* ────────────────────── Handshake loop callback ────────────────────── */
-static int client_loop_cb(picoquic_quic_t* quic,
-                          picoquic_packet_loop_cb_enum cb_mode,
-                          void* callback_ctx,
-                          void* callback_arg)
+/**
+ * @brief Command Line Interface(CLI) 인자들을 파싱하는 함수
+ *
+ * @param argc main 함수에서 받은 인자 개수
+ * @param argv main 함수에서 받은 인자 배열
+ * @param options 파싱 결과를 저장할 구조체 포인터
+ * @return 성공 시 0, 실패 시 -1
+ */
+static int parse_cli(int argc, char** argv, cli_opts_t* opt)
 {
-    (void)callback_ctx; (void)callback_arg;
+    // 기본값
+    memset(opt, 0, sizeof(*opt));
+    opt->port       = 4433;
+    opt->path       = "/";
+    opt->alpn       = "h3";
+    opt->sni        = NULL;
+    opt->no_verify  = 1;        // 자체 인증서 환경이면 1 유지, 아니면 0
+    opt->out_dir    = "frames";
+    opt->max_frames = 0;        // 0 = 무제한
 
-    if (cb_mode == picoquic_packet_loop_ready) {
-        fprintf(stderr, "[loop_cb] Waiting for packets.\n");
-    }
-
-    picoquic_cnx_t* c = picoquic_get_first_cnx(quic);
-    if (c) {
-        picoquic_state_enum st = picoquic_get_cnx_state(c);
-
-        if (st == picoquic_state_client_ready_start || st == picoquic_state_ready) {
-            fprintf(stderr, "[loop_cb] handshake ready -> exit loop\n");
-            return PICOQUIC_NO_ERROR_TERMINATE_PACKET_LOOP;
-        }
-        if (st == picoquic_state_disconnecting ||
-            st == picoquic_state_closing ||
-            st == picoquic_state_closing_received ||
-            st == picoquic_state_draining ||
-            st == picoquic_state_disconnected) {
-            fprintf(stderr, "[loop_cb] connection closing (%d) -> exit loop\n", (int)st);
-            return PICOQUIC_NO_ERROR_TERMINATE_PACKET_LOOP;
-        }
-    }
-    return 0; // 계속 대기
-}
-
-/* ────────────────────── Main ────────────────────── */
-int main(int argc, char** argv) {
-    fprintf(stderr, BUILD_BANNER "\n");
-
-    cli_opts_t opt;
-    if (parse_cli(argc, argv, &opt) != 0) return 1;
-
-    fprintf(stderr, "[로그] 1. 클라이언트 시작 (host=%s, port=%d, path=%s, alpn=%s)\n",
-            opt.host, opt.port, opt.path, opt.alpn ? opt.alpn : "(null)");
-
-    /* 출력/로그 디렉토리 준비 */
-    if (ensure_dir(opt.out_dir) != 0) {
-        fprintf(stderr, "[client] cannot create output dir: %s\n", opt.out_dir);
-        return 1;
-    }
-    (void)ensure_dir("binlog");
-    (void)ensure_dir("qlogs");
-
-    /* SIGINT 핸들 */
-    signal(SIGINT, handle_sigint);
-
-    /* QUIC 인스턴스 */
-    picoquic_quic_t* quic = picoquic_create(
-        16, NULL, NULL, NULL, opt.alpn, NULL, NULL,
-        NULL, NULL, NULL, picoquic_current_time(), NULL, NULL, NULL, 0);
-    if (!quic) { fprintf(stderr, "[client] picoquic_create() failed\n"); return 1; }
-
-    /* 로깅 */
-    picoquic_set_binlog(quic, "binlog");
-    picoquic_set_qlog(quic,  "qlogs");
-    picoquic_use_unique_log_names(quic, 1);
-    picoquic_set_key_log_file_from_env(quic);
-
-    /* 전송 파라미터 (보수적으로 큼) */
-    {
-        picoquic_tp_t ctp; memset(&ctp, 0, sizeof(ctp));
-        ctp.initial_max_data                    = 64ull * 1024 * 1024;
-        ctp.initial_max_stream_data_bidi_local  = 8ull * 1024 * 1024;
-        ctp.initial_max_stream_data_bidi_remote = 8ull * 1024 * 1024;
-        ctp.initial_max_stream_data_uni         = 8ull * 1024 * 1024;
-        ctp.initial_max_stream_id_bidir         = 16;
-        ctp.initial_max_stream_id_unidir        = 1024;
-
-        /* ==================== 수정된 부분 ==================== */
-        ctp.is_multipath_enabled = 1;           // 멀티패스 사용 선언
-        ctp.initial_max_path_id  = 3;           // 서버와 유사하게 설정
-        ctp.enable_time_stamp    = 3;           // 정확한 RTT 측정을 위해 권장
-        /* ===================================================== */
-        /* ★ 핵심: max_packet_size는 1200~65527 이어야 함 (0이면 TPERR) */
-        ctp.max_packet_size   = 1200;   // or 1400~1500 등, 최소 1200 이상
-        /* 기본값들도 안전하게 명시 */
-        ctp.ack_delay_exponent = 3;
-        ctp.max_ack_delay      = 25;    // ms
-        ctp.active_connection_id_limit = 4; // 권장: 2 이상
-        picoquic_set_default_tp(quic, &ctp);
-    }
-
-    if (opt.no_verify) {
-        /* 외부에서 PTLS_TRUST_ALL 제공된다는 가정(DEV ONLY) */
-        picoquic_set_verify_certificate_callback(quic, &PTLS_TRUST_ALL, NULL);
-        fprintf(stderr, "[client] WARNING: --no-verify enabled (DEV ONLY)\n");
-    }
-
-    /* 서버 주소 확인 */
-    struct sockaddr_storage peer; int is_name = 0;
-    fprintf(stderr, "[로그] 2. 서버 주소 확인 중...\n");
-    const char* connect_host = opt.addr ? opt.addr : opt.host;
-    const char* sni_host     = opt.sni  ? opt.sni  : opt.host;
-    if (picoquic_get_server_address(connect_host, opt.port, &peer, &is_name) != 0) {
-        fprintf(stderr, "[client] resolve failed: %s:%d\n", opt.host, opt.port);
-        picoquic_free(quic); return 1;
-    }
-    fprintf(stderr, "[peer] family=%s\n",
-        (((struct sockaddr*)&peer)->sa_family==AF_INET6)?"IPv6":
-        (((struct sockaddr*)&peer)->sa_family==AF_INET) ?"IPv4":"?");
-    fprintf(stderr, "[로그] 2. 서버 주소 확인 완료.\n");
-
-    /* 연결 생성: SNI=host (H3 필수) */
-    fprintf(stderr, "[로그] 3. QUIC 연결 객체 생성 중...\n");
-    picoquic_cnx_t* cnx = picoquic_create_cnx(
-        quic, picoquic_null_connection_id, picoquic_null_connection_id,
-        (struct sockaddr*)&peer, picoquic_current_time(),
-        /* proposed_version */ 0, /* SNI */ sni_host, /* ALPN */ opt.alpn, /* client */ 1);
-    if (!cnx) { fprintf(stderr, "[client] create_cnx failed\n"); picoquic_free(quic); return 1; }
-    fprintf(stderr, "[로그] 3. QUIC 연결 객체 생성 완료.\n");
-
-    /* QUIC v1 강제(Version Negotiation 회피에 유리) */
-    picoquic_set_desired_version(cnx, 0x00000001);
-
-    /* 진단/상호운용 플래그 */
-    cnx->grease_transport_parameters      = 1;
-    cnx->local_parameters.enable_time_stamp   = 3;
-    cnx->local_parameters.do_grease_quic_bit  = 1;
-
-    /* PMTUD 보수적 */
-    picoquic_cnx_set_pmtud_policy(cnx, picoquic_pmtud_delayed);
-    picoquic_set_default_pmtud_policy(quic, picoquic_pmtud_delayed);
-
-    /* H3 경로/콜백 준비 (우리 client_cb 사용) */
-    picohttp_server_path_item_t paths[] = {
-        { (uint8_t*)opt.path, (uint32_t)strlen(opt.path), client_cb, NULL }
+    static struct option long_opts[] = {
+        {"host",       required_argument, 0, 'h'},
+        {"addr",       required_argument, 0, 'a'},
+        {"port",       required_argument, 0, 'p'},
+        {"path",       required_argument, 0, 'P'},
+        {"alpn",       required_argument, 0, 'A'},
+        {"sni",        required_argument, 0, 's'},
+        {"no-verify",  no_argument,       0, 'k'},
+        {"out",        required_argument, 0, 'o'},
+        {"max-frames", required_argument, 0, 'm'},
+        {"help",       no_argument,       0, '?'},
+        {0,0,0,0}
     };
-    picohttp_server_parameters_t sp = { .path_table = paths, .path_table_nb = 1 };
 
-    app_ctx_t app; memset(&app, 0, sizeof(app));
-    snprintf(app.out_dir, sizeof(app.out_dir), "%s", opt.out_dir);
-    app.max_frames = opt.max_frames;
-    paths[0].path_app_ctx = &app;
-
-    h3zero_callback_ctx_t* h3ctx = h3zero_callback_create_context(&sp);
-    if (!h3ctx) { fprintf(stderr, "[client] h3zero ctx failed\n"); picoquic_free(quic); return 1; }
-    picoquic_set_callback(cnx, h3zero_callback, h3ctx);
-
-    /* 핸드셰이크 시작 */
-    fprintf(stderr, "[로그] 4. QUIC 연결 시작 (핸드셰이크 시작)...\n");
-    if (picoquic_start_client_cnx(cnx) != 0) {
-        fprintf(stderr, "[client] start_client_cnx failed\n");
-        h3zero_callback_delete_context(cnx, h3ctx); picoquic_free(quic); return 1;
-    }
-
-    /* 패킷 루프(v1): 핸드셰이크만 */
-    fprintf(stderr, "[로그] 5. 핸드셰이크 패킷 루프 진입...\n");
-    {
-        int sockbuf     = 1 << 20; // ~1MB
-        int disable_gso = 1;       // GSO 비활성화
-        if (picoquic_packet_loop(
-                quic,              // 1) picoquic_quic_t*
-                0,                 // 2) local_port (0 = ephemeral)
-                0,                 // 3) local_af (0 = UNSPEC)
-                0,                 // 4) do_not_log (0 = 로그 허용)
-                sockbuf,           // 5) socket_buffer_size
-                disable_gso,       // 6) do_not_use_gso
-                client_loop_cb,    // 7) 콜백 함수 포인터
-                &app               // 8) 콜백 컨텍스트
-            ) != 0)
-        {
-            fprintf(stderr, "루프로직 진입 실패\n");
-            picoquic_state_enum st = picoquic_get_cnx_state(cnx);
-            uint64_t app_err = picoquic_get_application_error(cnx);
-            uint64_t tr_err  = picoquic_get_remote_error(cnx);
-            fprintf(stderr, "[client] first loop failed: state=%d app_err=%" PRIu64 " transport_err=%" PRIu64 "\n",
-                    st, app_err, tr_err);
-            goto cleanup;
+    int c, idx;
+    // getopt_long는 optind를 이동시킵니다.
+    while ((c = getopt_long(argc, argv, "", long_opts, &idx)) != -1) {
+        switch (c) {
+        case 'h': opt->host = optarg; break;
+        case 'a': opt->addr = optarg; break;
+        case 'p': {
+            long v = strtol(optarg, NULL, 10);
+            if (v <= 0 || v > 65535) {
+                fprintf(stderr, "Invalid --port: %s\n", optarg);
+                return -1;
+            }
+            opt->port = (int)v;
+            break;
         }
-    }
-    fprintf(stderr, "[로그] 5. 핸드셰이크 패킷 루프 종료.\n");
-
-    /* 상태 확인 */
-    {
-        picoquic_state_enum post = picoquic_get_cnx_state(cnx);
-        fprintf(stderr, "[로그] 6. 핸드셰이크 후 연결 상태: %d (%s)\n", post, picoquic_state_str_(post));
-        if (post != picoquic_state_ready && post != picoquic_state_client_ready_start) {
-            uint64_t app_err = picoquic_get_application_error(cnx);
-            uint64_t tr_err  = picoquic_get_remote_error(cnx);
-            fprintf(stderr,
-                    "[에러] ready 아님 → CONNECT 미전송. app_err=%" PRIu64 " transport_err=%" PRIu64 "\n",
-                    app_err, tr_err);
-            goto cleanup;  // ⬅️ 실패 시 즉시 종료
+        case 'P': opt->path = optarg; break;
+        case 'A': opt->alpn = optarg; break;
+        case 's': opt->sni  = optarg; break;
+        case 'k': opt->no_verify = 1;  break;
+        case 'o': opt->out_dir = optarg; break;
+        case 'm': {
+            long v = strtol(optarg, NULL, 10);
+            if (v < 0) { fprintf(stderr, "Invalid --max-frames: %s\n", optarg); return -1; }
+            opt->max_frames = (int)v;
+            break;
+        }
+        case '?':
+        default:
+            print_usage(argv[0]);
+            return -1;
         }
     }
 
-   /* CONNECT :protocol=webtransport (bidi stream, FIN은 닫지 않음) — ready일 때만 */
-    {
-        fprintf(stderr, "[로그] 7. WebTransport CONNECT 요청 생성 및 전송 시도...\n");
-        char authority[256]; snprintf(authority, sizeof(authority), "%s:%d", (opt.sni?opt.sni:opt.host), opt.port);
-        uint64_t ctrl_id = picoquic_get_next_local_stream_id(cnx, /*is_unidir=*/0); // bidi
-
-        /* 스케줄러에 올리기 */
-        picoquic_mark_active_stream(cnx, ctrl_id, 1, NULL);
-
-        /* FIN=0 : 세션 유지 */
-        if (h3zero_client_create_connect_request(cnx, ctrl_id, authority, opt.path, /*fin=*/0) != 0) {
-            fprintf(stderr, "[client] CONNECT request failed\n");
-            goto cleanup;
-        }
-        fprintf(stdout, "[client] CONNECT sent (ctrl stream=%" PRIu64 ")\n", ctrl_id);
+    // 필수값 체크
+    if (!opt->host) {
+        fprintf(stderr, "Error: --host 는 필수입니다.\n");
+        print_usage(argv[0]);
+        return -1;
     }
+    if (!opt->path) opt->path = "/";
 
-    /* 메인 루프 (데이터 교환/종료까지) */
-    fprintf(stderr, "[로그] 8. 메인 데이터 패킷 루프 진입...\n");
-    {
-        picoquic_packet_loop_param_t lp; memset(&lp, 0, sizeof(lp));
-        lp.local_port = 0;           // 에페메럴 포트
-        lp.local_af   = 0;           // 자동(UNSPEC) → v4/v6 허용
-        lp.do_not_use_gso = 1;       // GSO 비활성화
-        lp.socket_buffer_size = 1<<20;   // ~1MB
-        (void)picoquic_packet_loop_v2(quic, &lp, loop_hook, &app);
-    }
-    fprintf(stderr, "[로그] 8. 메인 데이터 패킷 루프 종료.\n");
-
-    {
-        picoquic_state_enum st = picoquic_get_cnx_state(cnx);
-        uint64_t app_err  = picoquic_get_application_error(cnx);
-        uint64_t tr_err   = picoquic_get_remote_error(cnx);
-        fprintf(stderr, "[client] final state=%d app_err=%" PRIu64 " transport_err=%" PRIu64 "\n",
-                st, app_err, tr_err);
-    }
-
-cleanup:
-    fprintf(stdout, "[client] cleaning up...\n");
-    if (app.streams) free_streams(&app);
-    if (h3ctx) h3zero_callback_delete_context(cnx, h3ctx);
-    picoquic_free(quic);
     return 0;
+}
+static int ensure_dir(const char* dir)
+{
+    if (dir == NULL || dir[0] == '\0') return 0;
+
+    struct stat st;
+    if (stat(dir, &st) == 0) {
+        if (S_ISDIR(st.st_mode)) return 0;
+        fprintf(stderr, "[ensure_dir] path exists but not a directory: %s\n", dir);
+        return -1;
+    }
+
+    if (mkdir(dir, 0755) == 0) return 0;
+
+    if (errno == EEXIST) return 0;
+    perror("[ensure_dir] mkdir");
+    return -1;
 }
